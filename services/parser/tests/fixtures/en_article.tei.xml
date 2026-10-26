@@ -1,0 +1,914 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">ADVANCED METHODS FOR RECORD LINKAGE 940920</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author role="corresp">
+							<persName><forename type="first">William</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+							<email>bwinkler@census.gov</email>
+						</author>
+						<title level="a" type="main">ADVANCED METHODS FOR RECORD LINKAGE 940920</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">AD15A138057CECFD948677EB31FA7FB8</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.8.1" ident="GROBID" when="2026-10-24T22:11+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Record linkage, or computer matching, is needed for the creation and maintenance of name and address lists that support operations for and evaluations of a Year 2000 Census. This paper describes three advances. The first is an enhanced method of string comparison for dealing with typographical variations and scanning errors. It improves upon string comparators in computer science. The second is a linear assignment algorithm that can use only 0.002 as much storage as existing algorithms in operations research, requires at most an additional 0.03 increase in time, and has less of a tendency to make erroneous matching assignments than existing sparse-array algorithms because of how it deals with most arcs. The third is an expectation-maximization algorithm for estimating parameters in latent class, loglinear models of the type arising in record linkage. The associated theory and software are the only known means of dealing with general interaction patterns and allow weak use of a priori information via a generalization to the MCECM algorithm of Meng and Rubin. Models assuming that interactions are conditionally independent given the class are typically considered in biostatistics and social science.</p><p>Record linkage, or computer matching, is a means of creating, updating, and unduplicating lists that may be used in surveys. It serves as a means of linking individual records via name and address information from differing administrative files. If the files are linked using proper mathematical models, then the files can be analyzed using statistical methods such as regression and loglinear models <ref type="bibr" target="#b26">(Scheuren and Winkler 1993)</ref>.</p><p>Modern record linkage represents a collection of methods from three different disciplines: computer science, statistics, and operations research. While the foundations are from statistics, beginning with the seminal work of Newcombe <ref type="bibr" target="#b20">(Newcombe et al. 1959</ref>, also Newcombe 1988)  and <ref type="bibr" target="#b10">Fellegi and Sunter (1969)</ref>, the means of implementing the methods have primarily involved computer science. Record linkage begins with highly evolved software for parsing and standardizing names and addresses that are used in the matching. Name standardization identifies components such as first names, last names (surnames), titles, and middle initials. Address standardization locates components such as house numbers, street names, PO Boxes, and rural routes. With good standardization, effective comparison of corresponding components of information and the advanced methods described in this paper become possible. Methods from the three disciplines are needed for dealing with the three different types of problems arising in record linkage.</p><p>Because pairs of strings often exhibit typographical variation (e.g., Smith versus Smoth), the first need of record linkage is for effective string comparator functions that deal with typographical variations. While approximate string comparison has been a subject of research in computer science for many years (see survey article by Hall and Dowling 1980), the most effective ideas in the record linkage context were introduced by Jaro (1976, 1989; see also <ref type="bibr" target="#b32">Winkler 1985</ref><ref type="bibr" target="#b35">Winkler , 1990))</ref>. <ref type="bibr" target="#b6">Budzinsky (1991)</ref>, in an extensive review of twenty string comparison methods, concluded that the original Jaro method and the extended method due to <ref type="bibr" target="#b35">Winkler (1990)</ref> worked second best and best, respectively.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Statistics Canada <ref type="bibr" target="#b21">(Nuyens 1993)</ref> subsequently added string comparators based on Jaro and Winkler logic to CANLINK, Statistics Canada's matching system. This paper describes two new enhancements to the string comparators used at the Census Bureau. The first, due to <ref type="bibr" target="#b17">McLaughlin (1993)</ref>, adds logic for dealing with scanning errors (e.g., 'I' verus '1') and certain common keypunch errors (e.g., 'V' versus 'B'). The second due to <ref type="bibr" target="#b16">Lynch and Winkler (1994)</ref> makes adjustments for pairs of long strings having a high proportion of characters in common.</p><p>The second need of record linkage is for effective means of estimating matching parameters and error rates. In addition to proving the theoretical optimality of the decision rule of <ref type="bibr">Newcombe, Fellegi and Sunter (1969)</ref> showed how matching parameters could be estimated directly from available data. Their estimation methods admit closed-form solutions only if there are three matching variables and a conditional independence assumption is made. With more variables, the Expectation-Maximization (EM) algorithm <ref type="bibr" target="#b9">(Dempster, Laird, and Rubin 1977</ref>) can be used. If conditional independence is not assumed (i.e., interactions between agreements of variables such as house number, last name, and street name are allowed), then general computational algorithms <ref type="bibr" target="#b34">(Winkler 1989</ref>) can be used. The general algorithm is an example of the MCECM algorithm of <ref type="bibr" target="#b18">Meng and Rubin (1993)</ref>. An enhancement to the basic algorithm <ref type="bibr" target="#b38">(Winkler 1993)</ref> allows weak use of a priori information via convex constraints that restrict the solutions to subportions of the parameter space. The enhancement generalizes the MCECM algorithm.</p><p>The third need of record linkage is for a means of forcing 1-1 matching. <ref type="bibr" target="#b14">Jaro (1989)</ref> introduced a linear sum assignment procedure (lsap) due to <ref type="bibr" target="#b7">Burkard and Derigs (1980)</ref> as a highly effective means of eliminating many pairs that ordinarily might be clerically reviewed. With a household data source containing multiple individuals in a household, it effectively keeps the four pairs associated with father-father, mother-mother, son-son, and daughter-daughter pairs while eliminating the remaining twelve pairs associated with the household. An enhanced algorithm that uses less storage <ref type="bibr" target="#b24">(Rowe 1987)</ref> was used during the 1990 Decennial Census <ref type="bibr" target="#b43">(Winkler and Thibaudeau 1991)</ref>. This paper describes a new algorithm <ref type="bibr" target="#b39">(Winkler 1994a</ref>) that can use 0.002 as much storage as the Rowe algorithm and can eliminate some subtly erroneous matches that often occur in pairs of general administrative lists having only moderate overlap. In comparison with sparse-array algorithms, the new algorithm can use only 1/6 as much storage, is more than ten times as fast, and does not induce error because of the manner in which it deals with non-assigned arcs.</p><p>The next three sections describe the string comparator, the parameter-estimation algorithm, and the assignment algorithm, respectively. Each section contains examples and results that give insight into the differing methods. As the paper progresses, it increasingly indicates how the different methods affect each other but does not go as far as showing how overall matching efficacy is improved. The results of section 5 provide empirical examples of how matching efficacy is improved for three, small pairs of high quality lists. Section 5 also presents a new method for estimating error rates and compares it to the method of <ref type="bibr">Belin and Rubin (1994)</ref>. The discussion in section 6 describes additional uses of the new methods, some of their limitations, and future research. The final section consists of a summary and conclusion.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.">APPROXIMATE STRING COMPARISON</head><p>Dealing with typographical error can be vitally important in a record linkage context. If comparisons of pairs of strings are only done in an exact character-by-character manner, then many matches may be lost. An extreme example is the Post Enumeration Survey (PES) <ref type="bibr">(Winkler and</ref><ref type="bibr">Thibaudeau 1991, also Jaro 1989)</ref> in which, among true matches, almost 20 percent of last names and 25 percent of first names disagreed character-by-character. If matching had been performed on a character-by-character basis, then more than 30 percent of matches would have been missed by computer algorithms that were intended to delineate matches automatically. In such a situation, required manual review and (possibly) matching error would have greatly increased. <ref type="bibr" target="#b13">Jaro (1976</ref><ref type="bibr">Jaro ( , also 1989</ref>) introduced a string comparator that accounts for insertions, deletions, and transpositions. In a small study, <ref type="bibr" target="#b32">Winkler (1985)</ref> showed that the Jaro comparator worked better than some others from computer science. In a large study, <ref type="bibr" target="#b6">Budzinsky (1991)</ref> concluded that the comparators due to <ref type="bibr">Jaro and Winkler (1990)</ref> were the best among twenty in the computer science literature. The basic Jaro algorithm is: (1) compute the string lengths, (2) find the number of common characters in the two strings, and (3) find the number of transpositions. The definition of common is that the agreeing character must be within 1/2 the length of the shorter string. The definition of transposition is that the character from one string is out of order with the correponding common character from the other string. The string comparator value (rescaled for consistency with the practice in computer science) is:</p><formula xml:id="formula_0">jaro(s1,s2) = 1/3( #common/str_len1 + #common/str_len2 + 0.5 #transpositions/#common),<label>(2.1)</label></formula><p>where s1 and s2 are the strings with lengths str_len1 and str_len2, respectively. The new string comparator algorithm begins with the basic Jaro algorithm and then proceeds to three additional loops corresponding to the enhancements. Each enhancement makes use of information that is obtained from the loops prior to it.</p><p>The first enhancement due to <ref type="bibr" target="#b17">McLaughlin (1993)</ref> assigns value 0.3 to each disagreeing but similar character. Each exact agreement gets value 1.0 and all exact agreements are located prior to searching for similar characters. Similar characters might occur because of scanning errors ('1' versus 'l') or keypunch ('V' versus 'B'). The number of common characters (#common) in equation (2.1) gets increased by 0.3 for each similar character, is denoted by #similar, and #similar is substituted for #common in the first two components of equation (2.1).</p><p>The second enhancement due to <ref type="bibr" target="#b35">Winkler (1990)</ref> gives increased value to agreement on the beginning characters of a string. It was based on ideas from a very large empirical study by <ref type="bibr" target="#b22">Pollock and Zamora (1984)</ref> for the Chemical Abstracts Service. The study showed that the fewest errors typically occur at the beginning of a string and the error rates by character position increase monotonically as the position moves to the right. The enhancement basically consisted of adjusting the string comparator value upward by a fixed amount if the first four characters agreed; by lesser amounts if the first three, two, or one characters agreed. The string comparator examined by <ref type="bibr">Budzkinsky (1991)</ref> consisted of the Jaro comparator with only the Winkler enhancement.</p><p>The final enhancement due to <ref type="bibr" target="#b16">Lynch and Winkler (1994)</ref> adjusts the string comparator value if the strings are longer than six characters and more than half the characters beyond the first four agree.</p><p>The final enhancement was based on detailed comparisons between versions of the comparator. The comparisons involved tens of thousands of pairs of last names, first names, and street names that did not agree on a character-by-character basis but were associated with truly matching records.</p><p>Table <ref type="table" target="#tab_0">2</ref>.1 illustrates the effect of the new enhanced comparators on last names, first names, and street names, respectively. If each string in a pair is less than four characters, then the Jaro and Winkler comparators return the value zero. The Jaro and Winkler comparator values are produced by the loop from the main production software (e.g., <ref type="bibr" target="#b43">Winkler and Thibaudeau 1991)</ref> which is only entered if the two strings do not agree character-by-character. The return value of zero is justified because if each of the strings has three or less characters, then they necessarily disagree on at least one.</p><p>In record linkage situations, the string comparator value is used in adjusting the matching weight associated with the comparison downward from the agreement weight toward the disagreement weight. The weighting methodology is described in the next section. Using crude statistical modeling techniques, <ref type="bibr" target="#b35">Winkler (1990)</ref> developed downweighting functions for last names, first names, street names, and some numerical comparisons that generalized the original downweighting function introduced by Jaro.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.">PARAMETER-ESTIMATION VIA THE EM ALGORITHM</head><p>The record linkage process attempts to classify pairs in a product space A × B from two files A and B into M, the set of true matches, and U, the set of true nonmatches. <ref type="bibr" target="#b10">Fellegi and Sunter (1969)</ref>, making rigorous concepts introduced by <ref type="bibr" target="#b20">Newcombe (1959)</ref>, considered ratios of probabilities of the form:</p><formula xml:id="formula_1">R = P( | M) / P( | U) (3.1)</formula><p>where is an arbitrary agreement pattern in a comparison space . For instance, might consist of eight patterns representing simple agreement or not on the largest name component, street name, and street number. Alternatively, each might additionally account for the relative frequency with which specific values of name components such as "Smith", "Zabrinsky", "AAA", and "Capitol" occur.</p><p>The decision rule is given by: If R &gt; UPPER, then designate pair as a link.</p><p>If LOWER R UPPER, then designate pair as a possible link and hold for clerical review.</p><p>(3.2)</p><p>If R &lt; LOWER, then designate pair as a nonlink.</p><p>The cutoff thresholds UPPER and LOWER are determined by a priori error bounds on false matches and false nonmatches. The three components of Rule (3.2) agree with intuition. If consists primarily of agreements, then it is intuitive that would be more likely to occur among matches than nonmatches and ratio (3.1) would be large. On the other hand, if consists primarily of disagreements, then ratio (3.1) would be small. <ref type="bibr">Fellegi and Sunter (1969, Theorem)</ref> showed that the decision rule is optimal in the sense that for any pair of fixed upper bounds on the rates of false matches and false nonmatches, the clerical review region is minimized over all decision rules on the same comparison space . The theory holds on any subset such as pairs agreeing on a postal code, on street name, or on part of the name field. Ratio R or any monotonely increasing transformation of it (such as given by a logarithm) is defined as a matching weight or total agreement weight. In actual applications, the optimality of the decision rule (3.2) is heavily dependent on the accuracy of the estimates of the probabilities given in (3.1). The probabilities in (3.1) are called matching parameters or matching weights. <ref type="bibr" target="#b10">Fellegi and Sunter (1969</ref><ref type="bibr">, pp. 1194</ref><ref type="bibr">-1197)</ref> were the first to observe that certain parameters needed for the decision rule (3.2) could be obtained directly from observed data if certain simplifying assumptions were made. For each agreement pattern , they considered</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>P() = P( | M) P(M) + P( | U) P(U)</head><p>(3.3) and noted that the proportion of pairs having representation could be computed directly from available data. If consists of a simple agree/disagree (zero/one) pattern associated with three variables satisfying the conditional independence assumption so that there exist vector constants (marginal probabilities) m (m , m , , m ) and u (u , u , , u ) such that, for all ,</p><formula xml:id="formula_2">1 2 K 1 2 K K (1-) i i P( | M) = m (1-m ) i i i=1 and (3.4) K (1-) i i P( | U) = u (1-u ) . i i i=1</formula><p>then Fellegi and Sunter provide the seven solutions for the seven distinct equations associated with (3.4). If represents more than three variables, then it is possible to apply general equation-solving techniques such as "the method of moments" (e.g., <ref type="bibr">Hogg and Craig 1973, pp. 205-206)</ref>. Because the "method of moments" has shown numerical instability in some record linkage applications <ref type="bibr">(Jaro 1989, p. 417)</ref> and with general mixture distributions <ref type="bibr">(Titterington et al. 1988, p. 71)</ref>, maximumlikelihood-based methods such as the Expectation-Maximization (EM) algorithm <ref type="bibr" target="#b9">(Dempster et al. 1977</ref>; also <ref type="bibr" target="#b18">Meng and Rubin 1993</ref>) may be used.</p><p>The EM algorithm for the independence model described above has been used in a variety of record linkage situations. With each, it converged rapidly to unique limiting solutions over different starting points <ref type="bibr" target="#b29">(Thibaudeau 1989;</ref><ref type="bibr" target="#b34">Winkler 1989</ref><ref type="bibr" target="#b37">Winkler , 1992))</ref>. The major difficulty with the parameterestimation techniques (EM or an alternative such as method of moments) is that they may yield solutions that partition the set of pairs into two sets that differ substantially from the desired sets of true matches and true nonmatches.</p><p>The basic application of the EM algorithm has been generalized in three ways. The first way involved algorithms <ref type="bibr" target="#b29">(Thibaudeau 1989</ref><ref type="bibr" target="#b34">, Winkler 1989</ref>) that did not require conditional independence. Interactions between agreements on fields such as first name, last name, and house number were allowed. The second way assumed that there were three latent classes instead of two <ref type="bibr" target="#b37">(Winkler 1992)</ref>. It was stimulated by work <ref type="bibr" target="#b27">(Smith and Newcombe 1975)</ref> showing that conditional independence does not hold because agreement on household variables (among others) are intuitively correlated. The three classes are (1) matches within households, (2) nonmatches (e.g., husband-wife) within households, and (3) nonmatches outside of households. When EM fitting using 2-class algorithms are used, a set of pairs often divides into pairs agreeing on household information. Agreement on household variables such as last name, house number, street name, and phone overwhelm individual identifiers such as first name, age, and sex. The third way allowed convex constraints <ref type="bibr" target="#b37">(Winkler 1992</ref><ref type="bibr" target="#b38">(Winkler , 1993</ref><ref type="bibr" target="#b40">(Winkler , 1994b</ref>) that restrict (predispose) solutions to subportions of the parameter space. For instance, a convex constraint might take the form: P(agree first, agree last | match) a, (3.5) for some 0 &lt; a &lt; 1. The EM algorithm with convex constraints <ref type="bibr" target="#b38">(Winkler 1993)</ref> generalizes the MCECM algorithm of <ref type="bibr" target="#b18">Meng and Rubin (1993)</ref>. Convex restrictions can be based on a priori knowledge of subspace regions in which modes of the likelihood yield good matching performance.</p><p>In a variety of situations, having decision rules based on weights obtained from modelling interactions (with or without convex constraints) can yield accurate decision rules and reasonably accurate estimates of error rates <ref type="bibr">(Winkler 1993, Armstrong and</ref><ref type="bibr" target="#b1">Mayda 1993)</ref>. In contrast to other methods such as scoring or Newton-Raphson, the EM algorithm converges slowly but is very stable numerically <ref type="bibr" target="#b18">(Meng and Rubin 1993)</ref>.</p><p>The effects of the string comparator values and methods for adjusting weights downward from the agreement weight toward the disagreement weight are intimately tied in with the weighting methods. The basic idea of the string comparator and associated downward adjustments is to account for the partial agreement on individual fields. In the independent case, the effects of the string comparator values are much more easily understood. Details of the downward adjustment mechanism in the independent case are given in <ref type="bibr" target="#b35">Winkler (1990)</ref>. The string comparator value associated with each field is used in adjusting the weight associated with that field downward. The adjustment on each field is assumed to be independent of any other field. If the resultant weight associated with the field is negative, then the field is assumed to disagree in the string-comparator sense; otherwise, it agrees. If there are K fields, then there are 2 agreement patterns and the total agreement weight associated K with all fields is just the sum of the K string-comparator-adjusted individual-field agreement weights.</p><p>The effects of the string comparator values in the interaction case are more difficult to model and interpret because (partial) agreement in one field can no longer be assumed independent of (partial) agreement on another. During matching in the interaction (dependent) case, the agreement patterns are computed in the same manner (i.e., independently) as in the independent case. The reason for doing this is that the generalized weights divide the sets of pairs into different classes that are based on the independent patterns. Because the general weights agree much more closely with the truth, downward adjustments due to observed typographical variations in individual fields are only 1/3 what they were in the original independent case. The factor 1/3 was obtained via ad hoc means. As in the independent case, the downward adjustments are based on the estimated marginal probabilities associated with individual fields. The downward adjustments, however, are applied to the general weights. Empirically, using 1/3 the previous downward adjustment works better in all situations in which it has been used. The available data do not allow semi-rigorous modelling as in the independent case <ref type="bibr" target="#b35">(Winkler 1990</ref>) because there are too many parameters.</p><p>The main theorem of Fellegi and Sunter is known to hold on any set of pairs. In practice, it is often necessary to restrict results to subsets of pairs from the entire product space. In some applications, only pairs agreeing on a postal code such as U.S. ZIP code and first character of surname are considered. The restriction is referred to as blocking. It can reduce computation because the number of pairs is lowered by a factor of 150 with only minor (less than 5 percent) loss of true matches. By forcing 1-1 matching, the number of pairs can also be reduced. With data of the type considered in this paper and the best method of 1-1 forcing, the number of pairs can be further reduced by a factor of 9 with no additional loss of true matches beyond those lost via blocking. Methods of 1-1 forcing implicitly (or explicitly) can affect the weights that are used in the decision rules. The use of blocking and methods of forcing 1-1 matching can make accurate estimation of error rates much more difficult.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.">ASSIGNMENT</head><p>Jaro introduced a linear sum assignment procedure (lsap) to force 1-1 matching because he observed that greedy algorithms often made erroneous assignments. A greedy algorithm is one in which a record is always associated with the corresponding available record having the highest agreement weight. Subsequent records are only compared with available remaining records that have not been assigned. In the following, the two households are assumed to be the same, individuals have substantial identifying information, and the ordering is as shown.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>HouseH1</head><p>HouseH2 husband wife wife daughter daughter son son</p><p>A greedy algorithm erroneously assigns husband1-wife2, wife1-daughter2, and daughter1-son2 whereas the lsap makes the correct assignment because it takes the highest sum of three matching weights. The original lsap algorithm of <ref type="bibr">Burkard and Derigs (1980, pp. 1-11)</ref> used by <ref type="bibr" target="#b14">Jaro (1989)</ref> could only be applied to square arrays. In some applications in which a small file representing a small geographic subregion (100 records) is matched against a large region representing an entire U.S. Postal ZIP code (20,000 records), using the typical Operations Research (OR) procedure of creating a large square array could increase storage requirements by a factor of 50 or more. To solve the initial storage difficulty, <ref type="bibr" target="#b24">Rowe (1987)</ref> developed algorithms for rectangular arrays that were used in PES matching <ref type="bibr" target="#b43">(Winkler and Thibaudeau 1991)</ref>. Thus, the array of the above example would have dimension 50 × 20000 instead of 20000 × 20000. With square arrays, the Rowe algorithm makes identical assignments to the Burkard-Derigs algorithm.</p><p>Two difficulties arise when the Rowe algorithm is applied to general administrative lists. The first again involves size. With general lists, it is often necessary to compare all records agreeing on first character of surname and ZIP code. If the ZIP code has 60,000 individuals, then the largest array associated with agreement on first character of surname and ZIP might have dimension 5000 × 5000 which consists of 25 million numbers necessitating 100 megabytes of storage. Although it is possible to reduce array size by only considering pairs agreeing on ZIP and surname or a code of surname such as SOUNDEX, in some areas (say, involving Orientals or Hispanics) as many as 15 percent of matches would be lost.</p><p>The way the storage problem is solved is to develop an algorithm <ref type="bibr" target="#b39">(Winkler 1994a</ref>) that only stores the highest five weights above a threshold associated with each record from each file and to keep track of the positions (rows and columns) in the original full array. All other pairs are given a default weight which is described later. The algorithm proceeds in the same graph-theoretic manner as the Burkard-Derigs-Rowe algorithm in that it uses Dijkstra's shortest augmenting path algorithm. Details differ significantly because of the mechanisms necessary for tracking the stored (compressed) array. Storage is reduced from 5000 × 5000 to 5000 × 10 because only the highest five weights and their associated column positions from the original array are stored. Based on substantial testing, computation increases only 3 percent. With most weights being replaced by defaults, much of the computation of maxima within rows or columns is eliminated. The reason overall computation increases is that extensive loops for tracking positions in arrays are needed for the small subset of stored weights.</p><p>The second difficulty involves how the weights associated with spurious agreements on fields such as first name and street name can affect the overall assignment of pairs. The choice of the default weight can solve this difficulty. The difficulty shows up as much as 0.005 of the time with original PES lists. The proportion is small because the PES has substantial overlap with Census lists and spurious agreements are not much of a problem. With general administrative lists the problem can occur much more often because the moderate overlap of the pairs of lists makes spurious agreements among nonmatches a greater problem. The following example illustrates the situation. All pairs are assumed to agree on a geographic identifier and first character of last name. Agreement and disagreement weights are added to get the total weight that is in the array used in the assignment procedure. Two records are taken from each file. reci_fj refers to record i from file j. The first record from the first file has sex miskeyed. The array of total agreement weights is given by Array1. The rows are determined by the records from the first file and the columns are determined by the records from the second file. To obtain entry a , the first records from the respective files are compared. To obtain the total disagreement 11 weight a , agreement and disagreement weights are added according to whether the corresponding 11 fields in the record pair agree or disagree. The 13.0 weight in row 1 and column 2 occurs because of (spurious) agreement on street name and sex only. In this situation, the new algorithm would correctly make the assignment rec1_f1 &lt;--&gt; rec2_f2 and rec2_f1 &lt;--&gt; rec1_f2. The reason that existing sparse-array algorithms do not work is because they implicitly assign a large negative number to arcs that are not included in the graph. Using a sparse-array algorithm, the wrong assignment would always be made. With a number of large test decks for which true matching status is known, the original lsap, new assignment procedure, and sparse-array procedure resulted in induced error rates of 0.005, 0.000, 0.030, respectively. With pairs of lists having only moderate overlap or when different weighting methods that do not assume conditional independence (as in the above example) are used, then induced error rates with original lsap and sparse-array procedures can be much higher. In those situations, combinations of spurious agreements are more likely to occur and alternate weighting strategies may cause more error when they are combined with the original lsap.</p><p>The new assignment algorithm can reduce unnecessary erroneous assignments with general weights because some are set to 999.0 and 990.0 by the general EM program. Negative weights of large absolute value can explicitly induce error just as the sparse-array algorithms implicitly induce error. These default negative weights are designed to eliminate overflow and divide by zeros that result as certain of the estimated probabilities converge to zero. If an estimated conditional probability associated with an agreement pattern is equal to zero to 30 decimal places, then it is set equal to zero. In subsequent loops, the zero estimates necessarily remain at zero. The weight 999.0 is a default that occurs for an agreement pattern that has estimated probability given a match equal to zero and positive probability given a nonmatch. With the general EM algorithm, estimated probabilities can converge arbitrarily close to zero; with the independent EM algorithm, all estimated probabilities must be positive. The weight -990.0 is a default that occurs when both the probability given a match and the probability given a nonmatch are zero. It is only associated with agreement patterns for which there are no observed pairs having the agreement pattern.</p><p>Algorithms that force 1-1 matching are most effective when individual files contain few duplicates.</p><p>If files contain duplicates, then such duplicates are best dealt with via special software loops (e.g., <ref type="bibr" target="#b15">Jaro 1992</ref><ref type="bibr" target="#b23">, Porter 1994)</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.">RESULTS</head><p>Results are presented in two parts. The first section provides an overall comparison of matching methods that utilize various combinations of the new and old string comparators, the new and old assignment algorithms, and the generalized interaction weighting methods and independent weighting methods. The second provides results that show how accurately error rates can be estimated using the best matching methods from the first section. Error rates are compared with rates obtained via a method of <ref type="bibr">Belin and Rubin (1994)</ref> that is known to work well in a narrow range of situations <ref type="bibr">(Winkler and</ref><ref type="bibr">Thibaudeau 1991, Scheuren and</ref><ref type="bibr" target="#b38">Winkler 1993)</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1.">Overall Comparison of Matching Methods</head><p>For comparison purposes, results are produced using three pairs of files having known matching status. The baseline matching is done under 3-class, latent class models with interactions and under independence, respectively. The 3-class models are essentially the same ones used in <ref type="bibr" target="#b37">Winkler (1992</ref><ref type="bibr" target="#b38">Winkler ( , 1993))</ref>. The interactions are (1) 8-way between last name, first name, house number, street name, phone, age, relationship to head of household, and marital status, (2) 4-way between first name, house number, phone, and sex, and (3) 2-way between last name and race. The weights associated with interaction models are referred to as generalized weights and other weights obtained via independence models are referred to as independent weights. Results are reported for error rates of 0.002, 0.005, 0.01, and 0.02, respectively. Link, Nonlink, and Clerical (or Possible Link) are the computer designations, respectively. Match and Nonmatch are the true statuses, respectively. The baseline results (designated by base) are produced using the existing lsap algorithm and the previous string comparator (see e.g., <ref type="bibr" target="#b35">Winkler 1990</ref>) but use the newer, 3-class EM procedures for parameter estimation <ref type="bibr" target="#b37">(Winkler 1992</ref><ref type="bibr" target="#b38">(Winkler , 1993))</ref>. The results with the new string comparator (designated s_c) are produced with the existing string comparator replaced by the new one. The results with the new assignment algorithm (designated as) use both the new string comparator and the new assignment algorithm. For comparison, results produced using the previous string comparator but with the new assignment algorithm (designated by os_l) are also given.</p><p>Matching efficacy improves if more pairs can be designated as links and nonlinks at fixed error rate levels. In Tables 5.1-3, computer-designated links and clerical pairs are subdivided into (true) matches and nonmatches. Only the subset of pairs produced via 1-1 assignments are considered. In producing the tables, pairs are sorted by decreasing weights. The weights vary according to the different model assumptions and string comparators used. The number of pairs above different thresholds (i.e., UPPER of section 3) at different link error rates (0.002, 0.005, 0.01, and 0.02) are presented. False match error rates above 2 percent are not considered because the sets of pairs above the cutoff threshold UPPER contain virtually all of the true matches from the entire set of pairs when error rates rise to slightly less than 2 percent. In each line under the Interaction and Independent columns, the proportion of nonmatches (among the sum of all pairs in the Link and Clerical columns) is 2 percent. The results generally show that the combination of generalized weighting with the new assignment algorithm performs slightly better than the baseline with independent weighting. In all of the best situations, error levels are very low. The new string comparator produces worse results than the previous one (see e.g., <ref type="bibr" target="#b35">Winkler 1990</ref>) and the new assignment algorithm (when combined with the new string comparator) performs slightly worse (between 0.1 and 0.01 percent) than the existing string comparator and lsap algorithm. In all situations (new or old string comparator, generalized or independent weighting), the new assignment algorithm slightly improves matching efficacy. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.">Estimation of Error Rates</head><p>This section provides results that show how the best matching methods of the previous section can be used in estimating error rates. The basic idea is to begin with probabilities obtained for non-1-1 matching and adjust them to account (partially) for the effect of 1-1 assignment. All matching methods use the previously existing string comparator and the new assignment algorithm. Results are shown for generalized weights (Figures <ref type="figure">1</ref><ref type="figure">2</ref><ref type="figure">3</ref><ref type="figure">4</ref><ref type="figure">5</ref><ref type="figure">6</ref>) and independent weights (Figures <ref type="figure">7</ref><ref type="figure">8</ref><ref type="figure">9</ref><ref type="figure">10</ref><ref type="figure">11</ref><ref type="figure">12</ref>) for the same three pairs of files used in the previous section. Error rate estimates are obtained via the following steps:</p><p>1. For each agreement pattern, observe the number of pairs obtained under 1-1 matching. 2. If the weight is above 3 or below -3 (using the natural log of ratio (3.1)), then use non-1-1 probability estimates to obtain expected numbers of matches and nonmatches (rounded to integers). 3. If the weight is between 3 and -3 and the pairs do not agree simultaneously on last name, house number and street name, use the same procedure as in 2 to get expected integer counts. If the pairs do not agree simultaneously on the three fields, then make a special adjustment to the expected counts that places an a priori upper bound on the proportion of nonmatches. 4. Use the expected integer values to obtain new estimated error rates.</p><p>The cumulations of probabilities used to get error rate estimates are via the weights used in matching. The reason that non-1-1 probabilities are used is that they yield accurate decision rules with the generalized weights (see also <ref type="bibr" target="#b38">Winkler 1993)</ref>. The true set of interactions is well approximated by the set of interactions in the model. Weights obtained under the independence model are known to yield highly inaccurate estimates of error rates in non-1-1 situations <ref type="bibr" target="#b34">(Winkler 1989</ref><ref type="bibr" target="#b37">(Winkler , 1992</ref><ref type="bibr" target="#b38">(Winkler , 1993))</ref>. The reason that 1-1 counts cannot be used directly in obtaining error rate estimates is covered in the discussion.</p><p>The results show that reasonably accurate estimates of the true underlying probability distributions (and thus error rates) can be obtained for matches (Figures <ref type="figure">1</ref><ref type="figure">2</ref><ref type="figure">3</ref>) and nonmatches (Figures <ref type="figure">4</ref><ref type="figure">5</ref><ref type="figure">6</ref>) under the generalized interaction model and for matches (Figures <ref type="figure">7</ref><ref type="figure">8</ref><ref type="figure">9</ref>) and nonmatches (Figures <ref type="figure">10</ref><ref type="figure">11</ref><ref type="figure">12</ref>) under the independence model. Truth is plotted against itself (45 degree line). If the estimates (jagged curve) are below the 45 degree line, they represent underestimates; if above, overestimates. Only estimated rates of 10 percent or less are displayed because at higher error rates the estimates tend to be relatively closer to the truth. Error rates higher than 10 percent are not likely to be tolerated in practical situations. Estimates with the generalized interaction weights are slightly more accurate than with independence weights. This is expected because non-1-1 error rate estimates with generalized weights are accurate (e.g., <ref type="bibr" target="#b38">Winkler 1993</ref>) and very few (less than 2%) of true matches are lost when 1-1 matching is forced. Thus, the shapes of the curves of matches in non-1-1 and 1-1 situations are approximately the same. While the non-1-1 counts with independence weights are far from those needed for accurate estimation, it may seem suprising that the error rate estimates under the independence model are as accurate as they are. A variety of authors <ref type="bibr" target="#b19">(Newcombe 1988</ref><ref type="bibr" target="#b14">, Jaro 1989</ref><ref type="bibr" target="#b43">, Winkler and Thibaudeau 1991)</ref> have obtained good matching results when independent weights are combined with methods of forcing 1-1 matching.</p><p>For comparison purposes, error rate estimates using the methods of this paper are compared with the method of <ref type="bibr">Belin and Rubin (1994)</ref> via Figures 13-15 for independent weights and the distributions of nonmatches. With the independent weights of this paper, Belin-Rubin estimates are roughly as accurate as the independence estimates of this paper. To obtain the estimates in producing the figures, I modified Belin's software to yield estimates in a form that is consistent with the method of this paper. The current Belin-Rubin method is not intended to yield estimates for the distribution of matches and would not converge (even upon recalibration) with generalized weights.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.">DISCUSSION</head><p>This section provides discussion of the computing environment and software, the new string comparator, the new assignment algorithm, and methods of error rate estimation.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.">Computation Considerations</head><p>The computational environment primarily consisted of a Sparcstation 2. The EM software <ref type="bibr" target="#b42">(Winkler 1994d)</ref>, written in FORTRAN, and all other software, written in C, compiles and runs on other machines such as VAXes, IBM PCs, and DEC Alphas under Windows NT. The software was originally written on an IBM PC. The new assignment algorithm and string comparator are in current production software <ref type="bibr" target="#b23">(Porter 1994</ref>) that is primarily intended for VAXes and UNIX workstations. The general EM program often requires between 5 and 20 CPU minutes for convergence. CPU time requirements of matching software are primarily dependent on the number of pairs processed and the number of fields being used in weight computations. Matching with two files of 10,000 files, 120,000 pairs (based on blocking criteria), and ten fields being compared requires approximately four minutes. The string comparison loops consume between 25 and 35 percent on the CPU time needed for matching.</p><p>The current version of the general EM software <ref type="bibr" target="#b42">(Winkler 1994d)</ref> incorporates three new combinatorial routines that generalize combinatorial routines due to <ref type="bibr" target="#b0">Armstrong (1992</ref>, see also <ref type="bibr" target="#b1">Armstrong and Mayda 1993)</ref>. Because the new general software allows modeling with an arbitrary number of classes and an arbitrary number of states per variable, it should facilitate modeling in nonrecord-linkage situations. The previous software only allowed for two or three classes and two or three value-states per variable which was appropriate for record linkage situations. It is the only latent-class software that does not assume conditional independence <ref type="bibr" target="#b8">(Clogg 1994)</ref>. Use of the combinatorial routines allows straightforward specification of the hierarchy of interaction effects and facilitates modeling and testing. While modeling is facilitated because interactions are much more easily specified, developing models still involves much trial, error, and intuition just as it does with ordinary loglinear models <ref type="bibr" target="#b5">(Bishop, Fienberg, and Holland 1975)</ref>. Early versions of the software had considerably more cumbersome methods for specifying the interactions.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2.">String Comparator</head><p>The new string comparator is primarily designed to assist on-line searches using last name, first name, or street name. In such situations, the new comparator is believed to be superior to the old <ref type="bibr" target="#b16">(Lynch and Winkler 1994)</ref>. The reason that the new comparator performs somewhat more poorly in matching situations is that error rates with the existing methods are very low and the redundancy of extra matching fields plays a more important role than single fields in isolation. Because the new string comparator often assigns slightly higher comparator values, a few isolated true nonmatches can receive slightly higher weighting scores and observed false match rates can increase above those obtained when the original string comparators were used.</p><p>An extenuating circumstance is that the downweighting functions <ref type="bibr" target="#b35">(Winkler 1990</ref>) have not been remodeled using the new string comparator due to the loss of the software for modeling the downweightings. I presently do not believe new downweighting functions will have more than a negligible effect on the finding of this paper that the new string comparator may slightly decrease matching efficacy when the new assignment algorithm is not used.</p><p>Presently, since there are no suitable test decks for checking scanning errors (i.e., 'I' versus '1') and some types of keypunch errors (i.e., adjacent keys 'V' versus 'B'), there has been no empirical testing of whether the associated adjustment for these types of errors helps.</p><p>The advantage of the new string comparator code is in a set of switches that can turn on or off various features. For most matching applications, the new adjustments will be turned off via switches that are in the existing source code. The string comparator code, with all the new features activated, runs at most 40 percent slower than the previous string comparator. With the new features switched off, the speed is very close to the previous speed <ref type="bibr">(Lynch and Winkler 1994). 6.3. Assignment</ref> Other record linkage practitioners (e.g., <ref type="bibr" target="#b19">Newcombe 1988</ref><ref type="bibr" target="#b14">, Jaro 1989</ref>) have observed strong evidence empirically that methods of forcing 1-1 matching can improve matching efficacy. This paper shows that certain subsets of pairs in certain types of files are much more strongly affected by the method of 1-1 forcing than others.</p><p>Based on additional tests with the existing string comparator under the independence model and the general interaction model, the new assignment algorithm always worked at least as well as the lsap that was used previously. Because the new assignment algorithm does not harm matching efficacy and always uses drastically less storage, it will always be used for matching applications. 6.4. Error Rate Estimation under the <ref type="bibr">Belin-Rubin Model</ref> The method of <ref type="bibr">Belin and Rubin (1994)</ref> was designed primarily for data situations similar to PES matching. In those situations, it performed very well <ref type="bibr" target="#b43">(Winkler and Thibaudeau 1991)</ref>. Because of the weighting adjustments that were used in PES matching, the shapes of curves of matches and nonmatches were somewhat different than the corresponding shapes of the curves under the independence model used in this paper. The Belin-Rubin method is not designed to work with non-1-1 matching, for situations in which the curves of matches and nonmatches are not very well separated, or for cases in which the shapes of curves are very different from those on which Belin and Rubin originally did their modeling.</p><p>The primary advantage of the Belin-Rubin method is in its conceptual simplicity and accuracy of the estimates in those situations for which it was designed. Belin and Rubin also obtain confidence intervals via the SEM algorithm. Because of the strong simplifying assumptions, the Belin-Rubin method can be subject to bias as Belin and Rubin showed in a large simulation experiment. I have also observed some bias with independence model weights and data that is somewhat similar to the data of this paper.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.5.">Error Rate Estimation under the Model of this Paper</head><p>Using non-1-1 matching, the general interaction model of this paper provided accurate decision rules and estimates of error rates with the three pairs of data files of the results sections plus two others. Estimates were relatively more accurate than the 1-1 adjusted estimates of this paper. An example is covered in <ref type="bibr" target="#b38">Winkler (1993)</ref>.</p><p>The reason that the generalized weighting model of this paper is useful is that it can be used in a variety of non-1-1 matching situations and, with adjustments like the one of this paper, can be used in 1-1 matching situations. Because the error-rate-estimation procedure of this paper uses more information, it also may be subject to less bias than the Belin-Rubin procedure. The bias of the error-rate-estimation procedures with a variety of different types of data is a topic of future research.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.6.">Direct Estimation of Error Rates</head><p>The Belin-Rubin method of estimating error rates is logical because, with reasonable a priori assumptions on the shape of the curves of matches and nonmatches, they can provide estimates that only use the curve of weights. The curve is the one that is associated with 1-1 matching but has weights that must be estimated a priori. The next most logical estimation method is to use to the table of counts of agreement patterns obtained via 1-1 matching directly because it may allow use of more information and may not need to make a priori assumptions. There are several reasons why such a direct use of the 1-1 counts is difficult. First, with the data of this paper, the cell counts associated with the patterns of 10 fields were nonzero for only 250 of 1024 cells. For as many as 100 of the nonzero cells, the counts were 3 or less; typically, they were 1. With the cells having nonzero counts of 3 or less, there was no apparent consistency in the proportions of matches across data files. Second, while chi-square fits of the 1-1, independence model improved by a factor of eight over the corresponding chi-square fits with the non-1-1, independence model, the chi-square values were at least a factor of six too large. The use of the asymptotic chi-square approximation with this data is not reasonable. Third, modeling of interaction effects is difficult because there appears to be many less degrees of freedom with this data than traditional statistics would suggest. For instance, with most pairs, agreement on last name appears to be almost perfectly correlated with agreement on house number, street name, and phone number. In other words, if there is agreement or disagreement on one of these variables, there is simultaneous agreement or disagreement on all the others. The race variable also has no additional discriminating power. Almost all distinguishing power is obtained from last name (alone), first name, age, marital status, relationship, and sex. At present, I have not been able to obtain good matching results with parameters that are estimated via models applied to the 1-1 counts.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.">SUMMARY AND CONCLUSION</head><p>This paper describes enhancements to a record linkage methodology that employ string comparators for dealing with strings that do not agree character-by-character, an enhanced methodology for dealing with differing, simultaneous agreements and disagreements between matching variables associated with pairs of records, and a new assignment algorithm for forcing 1-1 matching. Because of the interactions between the differing techniques, improving one method without accounting for how the method interacts with the others can actually reduce matching efficacy.</p><p>The results of this paper show that a sufficiently experienced practitioner can produce effective matching results and reasonably accurate estimates of error rates. I conclude that considerably more research is needed before the techniques can be used by naive practitioners on a large variety of administrative lists. The difficulties have the flavor of early regression analysis for which the science and art of dealing with outliers, colinearity, and other problems were not as developed as they are today. The techniques, however, can be applied by experience practitioners to a narrow range of high-quality lists such as those for evaluating Census undercount that have known matching characteristics.  <ref type="table">1 1 1 1 1 1 1  1  1 1 1 1 1 1 1 1  1 1 1  1  1 1 1 1 1 1 1 1   1 1 1   1 1 1  1 1 1 1 1 1 1 1 1 1   1 1 1   1 1 1</ref> </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head></head><label></label><figDesc>In this situation, a + a = a + a . Either 1-1 assignment is optimal. Because of the ordering, likely would yield the erroneous assignment rec1_f1 &lt;--&gt; rec1_f2 and rec2_f1 &lt;--&gt; rec2_f2. With the new assignment algorithm, only the largest weights above a threshold are stored. If the threshold is -8.0, then the array is</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 2</head><label>2</label><figDesc></figDesc><table><row><cell cols="6">.1. Comparison of String Comparators Using Last Names,</cell></row><row><cell cols="4">First Names, and Street Names</cell><cell></cell><cell></cell></row><row><cell cols="2">Two strings</cell><cell cols="4">String comparator values</cell></row><row><cell></cell><cell></cell><cell>Jaro</cell><cell>Wink</cell><cell>McLa</cell><cell>Lynch</cell></row><row><cell>SHACKLEFORD</cell><cell>SHACKELFORD</cell><cell>0.970</cell><cell>0.982</cell><cell>0.982</cell><cell>0.989</cell></row><row><cell>DUNNINGHAM</cell><cell>CUNNIGHAM</cell><cell>0.896</cell><cell>0.896</cell><cell>0.896</cell><cell>0.931</cell></row><row><cell>NICHLESON</cell><cell>NICHULSON</cell><cell>0.926</cell><cell>0.956</cell><cell>0.969</cell><cell>0.977</cell></row><row><cell>JONES</cell><cell>JOHNSON</cell><cell>0.790</cell><cell>0.832</cell><cell>0.860</cell><cell>0.874</cell></row><row><cell>MASSEY</cell><cell>MASSIE</cell><cell>0.889</cell><cell>0.933</cell><cell>0.953</cell><cell>0.953</cell></row><row><cell>ABROMS</cell><cell>ABRAMS</cell><cell>0.889</cell><cell>0.922</cell><cell>0.946</cell><cell>0.952</cell></row><row><cell>HARDIN</cell><cell>MARTINEZ</cell><cell>0.722</cell><cell>0.722</cell><cell>0.722</cell><cell>0.774</cell></row><row><cell>ITMAN</cell><cell>SMITH</cell><cell>0.467</cell><cell>0.467</cell><cell>0.507</cell><cell>0.507</cell></row><row><cell>JERALDINE</cell><cell>GERALDINE</cell><cell>0.926</cell><cell>0.926</cell><cell>0.948</cell><cell>0.966</cell></row><row><cell>MARHTA</cell><cell>MARTHA</cell><cell>0.944</cell><cell>0.961</cell><cell>0.961</cell><cell>0.971</cell></row><row><cell>MICHELLE</cell><cell>MICHAEL</cell><cell>0.869</cell><cell>0.921</cell><cell>0.938</cell><cell>0.944</cell></row><row><cell>JULIES</cell><cell>JULIUS</cell><cell>0.889</cell><cell>0.933</cell><cell>0.953</cell><cell>0.953</cell></row><row><cell>TANYA</cell><cell>TONYA</cell><cell>0.867</cell><cell>0.880</cell><cell>0.916</cell><cell>0.933</cell></row><row><cell>DWAYNE</cell><cell>DUANE</cell><cell>0.822</cell><cell>0.840</cell><cell>0.873</cell><cell>0.896</cell></row><row><cell>SEAN</cell><cell>SUSAN</cell><cell>0.783</cell><cell>0.805</cell><cell>0.845</cell><cell>0.845</cell></row><row><cell>JON</cell><cell>JOHN</cell><cell>0.917</cell><cell>0.933</cell><cell>0.933</cell><cell>0.933</cell></row><row><cell>JON</cell><cell>JAN</cell><cell>0.000</cell><cell>0.000</cell><cell>0.860</cell><cell>0.860</cell></row><row><cell>BROOKHAVEN</cell><cell>BRROKHAVEN</cell><cell>0.933</cell><cell>0.947</cell><cell>0.947</cell><cell>0.964</cell></row><row><cell>BROOK HALLOW</cell><cell>BROOK HLLW</cell><cell>0.944</cell><cell>0.967</cell><cell>0.967</cell><cell>0.977</cell></row><row><cell>DECATUR</cell><cell>DECATIR</cell><cell>0.905</cell><cell>0.943</cell><cell>0.960</cell><cell>0.965</cell></row><row><cell>FITZRUREITER</cell><cell>FITZENREITER</cell><cell>0.856</cell><cell>0.913</cell><cell>0.923</cell><cell>0.945</cell></row><row><cell>HIGBEE</cell><cell>HIGHEE</cell><cell>0.889</cell><cell>0.922</cell><cell>0.922</cell><cell>0.932</cell></row><row><cell>HIGBEE</cell><cell>HIGVEE</cell><cell>0.889</cell><cell>0.922</cell><cell>0.946</cell><cell>0.952</cell></row><row><cell>LACURA</cell><cell>LOCURA</cell><cell>0.889</cell><cell>0.900</cell><cell>0.930</cell><cell>0.947</cell></row><row><cell>IOWA</cell><cell>IONA</cell><cell>0.833</cell><cell>0.867</cell><cell>0.867</cell><cell>0.867</cell></row><row><cell>1ST</cell><cell>IST</cell><cell>0.000</cell><cell>0.000</cell><cell>0.844</cell><cell>0.844</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 4</head><label>4</label><figDesc></figDesc><table><row><cell cols="7">.1. Weights and Data Used in Assignment Examples</cell></row><row><cell></cell><cell>last</cell><cell>first</cell><cell>hsnm</cell><cell>stnm</cell><cell>age</cell><cell>sex</cell></row><row><cell>agr_wgt</cell><cell>+4.0</cell><cell>+4.0</cell><cell>+2.0</cell><cell>+0.5</cell><cell>+3.0</cell><cell>+0.5</cell></row><row><cell>dis_wgt</cell><cell>-4.0</cell><cell>-4.0</cell><cell>-3.0</cell><cell>-1.0</cell><cell>-3.0</cell><cell>-4.0</cell></row><row><cell>rec1_f1</cell><cell>robert</cell><cell>schenck</cell><cell>450</cell><cell>main</cell><cell>40</cell><cell>F</cell></row><row><cell>rec2_f1</cell><cell>sally</cell><cell>schenck</cell><cell>450</cell><cell>main</cell><cell>40</cell><cell>F</cell></row><row><cell>rec1_f2</cell><cell>sally</cell><cell>scheck</cell><cell>450</cell><cell>main</cell><cell>40</cell><cell>F</cell></row><row><cell>rec2_f2</cell><cell>sally</cell><cell>smith</cell><cell>667</cell><cell>main</cell><cell>32</cell><cell>F</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 5 .</head><label>5</label><figDesc>1 Matching Results At Different Error Rates 1st Pair of Files with 4539 and 4859 records 38795 Pairs Agreeing on Block and First Char Last</figDesc><table><row><cell></cell><cell cols="2">Interaction</cell><cell cols="2">Independent</cell></row><row><cell>Link</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>Error</cell><cell>Link</cell><cell>Clerical</cell><cell>Link</cell><cell>Clerical</cell></row><row><cell>Rate</cell><cell cols="4">match/nonm match/nonm match/nonm match/nonm</cell></row><row><cell>0.002</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>base</cell><cell>3266/ 7</cell><cell>83/61</cell><cell>3172/ 6</cell><cell>242/64</cell></row><row><cell>s_c</cell><cell>2995/ 6</cell><cell>320/62</cell><cell>3176/ 6</cell><cell>236/64</cell></row><row><cell>as</cell><cell>3034/ 6</cell><cell>334/63</cell><cell>3176/ 6</cell><cell>234/64</cell></row><row><cell>os_l</cell><cell>3299/ 7</cell><cell>93/63</cell><cell>3174/ 6</cell><cell>242/64</cell></row><row><cell>0.005</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>base</cell><cell>3312/17</cell><cell>37/51</cell><cell>3363/17</cell><cell>51/53</cell></row><row><cell>s_c</cell><cell>3239/17</cell><cell>76/51</cell><cell>3357/17</cell><cell>55/53</cell></row><row><cell>as</cell><cell>3282/17</cell><cell>86/52</cell><cell>3357/17</cell><cell>53/53</cell></row><row><cell>os_l</cell><cell>3354/17</cell><cell>38/52</cell><cell>3364/17</cell><cell>52/53</cell></row><row><cell>0.010</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>base</cell><cell>3338/34</cell><cell>11/34</cell><cell>3401/34</cell><cell>13/36</cell></row><row><cell>s_c</cell><cell>3287/34</cell><cell>28/34</cell><cell>3396/34</cell><cell>16/36</cell></row><row><cell>as</cell><cell>3352/34</cell><cell>16/35</cell><cell>3396/34</cell><cell>14/36</cell></row><row><cell>os_l</cell><cell>3380/34</cell><cell>13/35</cell><cell>3402/34</cell><cell>14/36</cell></row><row><cell>0.020</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>base</cell><cell>3349/68</cell><cell>0/ 0</cell><cell>3414/70</cell><cell>0/ 0</cell></row><row><cell>s_c</cell><cell>3315/68</cell><cell>0/ 0</cell><cell>3411/70</cell><cell>0/ 0</cell></row><row><cell>as</cell><cell>3368/69</cell><cell>0/ 0</cell><cell>3410/70</cell><cell>0/ 0</cell></row><row><cell>os_l</cell><cell>3393/69</cell><cell>0/ 0</cell><cell>3416/70</cell><cell>0/ 0</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 5 .</head><label>5</label><figDesc>2 Matching Results At Different Error Rates 2nd Pair of Files with 5022 and 5212 records 37327 Pairs Agreeing on Block and First Char Last</figDesc><table><row><cell></cell><cell cols="2">Interaction</cell><cell cols="2">Independent</cell></row><row><cell>Link</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>Error</cell><cell>Link</cell><cell>Clerical</cell><cell>Link</cell><cell>Clerical</cell></row><row><cell>Rate</cell><cell cols="4">match/nonm match/nonm match/nonm match/nonm</cell></row><row><cell>0.002</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>base</cell><cell>3415/ 7</cell><cell>102/65</cell><cell>3475/ 7</cell><cell>63/65</cell></row><row><cell>s_c</cell><cell>3308/ 7</cell><cell>182/64</cell><cell>3414/ 7</cell><cell>127/65</cell></row><row><cell>as</cell><cell>3326/ 7</cell><cell>184/65</cell><cell>3414/ 7</cell><cell>127/65</cell></row><row><cell>os_l</cell><cell>3430/ 7</cell><cell>107/65</cell><cell>3477/ 7</cell><cell>63/65</cell></row><row><cell>0.005</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>base</cell><cell>3493/18</cell><cell>24/54</cell><cell>3503/18</cell><cell>35/54</cell></row><row><cell>s_c</cell><cell>3349/17</cell><cell>41/54</cell><cell>3493/18</cell><cell>48/54</cell></row><row><cell>as</cell><cell>3484/18</cell><cell>26/54</cell><cell>3493/18</cell><cell>48/54</cell></row><row><cell>os_l</cell><cell>3511/18</cell><cell>26/54</cell><cell>3505/18</cell><cell>36/54</cell></row><row><cell>0.010</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>base</cell><cell>3501/35</cell><cell>16/37</cell><cell>3525/36</cell><cell>13/36</cell></row><row><cell>s_c</cell><cell>3478/35</cell><cell>12/38</cell><cell>3526/36</cell><cell>15/36</cell></row><row><cell>as</cell><cell>3498/35</cell><cell>12/37</cell><cell>3526/36</cell><cell>15/36</cell></row><row><cell>os_l</cell><cell>3519/36</cell><cell>18/36</cell><cell>3527/36</cell><cell>14/36</cell></row><row><cell>0.020</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>base</cell><cell>3517/72</cell><cell>0/ 0</cell><cell>3538/72</cell><cell>0/ 0</cell></row><row><cell>s_c</cell><cell>3490/71</cell><cell>0/ 0</cell><cell>3541/72</cell><cell>0/ 0</cell></row><row><cell>as</cell><cell>3510/72</cell><cell>0/ 0</cell><cell>3541/72</cell><cell>0/ 0</cell></row><row><cell>os_l</cell><cell>3537/72</cell><cell>0/ 0</cell><cell>3541/72</cell><cell>0/ 0</cell></row></table></figure>
+		</body>
+		<back>
+			<div type="annex">
+<div xmlns="http://www.tei-c.org/ns/1.0"> <ref type="table">1 1 1  1 1 1  1 1   1  1 1 1  1  1 1 1 1   1 1 1 1  1 1 1 1 1 1 1 1 1 1  1  1 1 1  1 1 1 1  1   1 1 1  1  1 1  1 1 1 1   1   1 1 1  1 1 1 1 1 1  1   1 1 1 1  1  1 1 1 1 1 1 1 1  1 1 1  1 1  1  1   1  1  1 1 1 1 1 1 1 1   1 1 1  1 1  1  1  1   1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1   1  1 1 1  1 1 1 1 1  1  1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1  1 1 1 1 1 1   1 1 1 1 1 1 1  1 1  1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</ref>  <ref type="table">1 1 1   1 1 1 1  1  1  1  1   1 1 1   1 1  1 1  1 1 1 1 1  1 1  1 1 1  1  1 1  1 1 1  1  1 1 1 1   1 1  1 1 1  1  1 1  1 1 1 1  1   1 1 1 1 1 1  1 1   1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1   1  1 1 1 1 1  1 1 1 1 1 1 1 1 1   1 1  1 1 1 1 1 1 1 1 1 1 1 1 1  1  1   1 1 1   1 1 1   1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1  1  1 1 1 1 1  1 1 1  1 1 1  1 1 1  1 1  1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1  1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1  1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</ref>  <ref type="table">1 1 1 1   1   1  1 1  1 1 1   1 1 1 1  1  1  1   1 1   1 1  1  1 1  1   1 1  1   1 1  1 1 1 1  1 1 1 1 1 1  1 1 1   1  1 1 1 1 1 1  1 1 1  1 1 1  1 1 1  1  1 1 1 1 1 1 1  1 1 1   1 1 1 1 1 1 1 1 1  1  1 1 1 1 1 1 1  1  1 1 1 1  1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1  1 1 1 1 1 1  1 1 1  1 1 1 1 1 1  1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</ref>  <ref type="table">1 1 1 1 1  1   1 1 1 1 1 1 1 1 1  1 1   1  1 1   1 1  1 1 1 1 1 1  1   1 1 1 1 1 1  1 1 1 1 1 1  1  1 1 1  1 1 1 1 1 1 1  1 1 1 1 1 1  1 1 1 1  1 1 1 1 1   1 1 1 1   1 1 1 1  1 1 1 1 1 1 1 1 1 1 1   1</ref>  <ref type="table">1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1  1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</ref>  <ref type="table">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 11 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  1 1</ref>  <ref type="table">1 1 1 1 1   1 1 1 1 1  1 1 1 1  1 1 1 1 1 1 1 1   1 1 1 1 1 1 1   1 1 1 1 1 1 1   1 1 1 1 1 1 1 1 1 1 1 1  1   1 1 1 1 1 1 1 1 1   1 1 1 1 1   1 1 1   1 1 1 1 1  1   1 1 1 1 1 1 1 1 1 1   1 1 1   1 1 1 1 1 1 1 1   1 1 1 1 1 1  1 1   1 1 1 1 1 1 1 1 1   1 1 1 1   1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1   1 11 1 1 1   1 1 1 1 1 1 1 1  1  1   1 1 1 1 1 1   1 1 1   1 1 1 1 1   1 1 1</ref>  <ref type="table">11 1 1 1 1  1 1 1 1 1 1 1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1 1   1 1 1 1 1  1 1 1 1 1 1 1 1   1 1 1 1 1 1 1  1 1 1 1 1 1   1 1 1 1 1  1 1 1 1 1 1   1 1 1 1   1 1 1 1  1 1 1 1 1 1 1 1 1   1 1 1 1 1 1   1 1 1 1 1 1   1 1 1 1 1 1 1   1 1 1 1 1 1 1   1 1 1 1 1 1   1 1 1 1 1 1   1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1 1 1   1 1 1 1 1 1 1   1 1 1  1 1 1   1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1   1 1 1   1 1 1 1 1 1 1</ref> <p>1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0.00 0.02 0.04 0.06 0.08 0.10 0.00 0.02 0.04 0.06 0.08 0.10 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</p></div>			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Error Rate Estimation for Record Linkage: Some Recent Developments</title>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">A</forename><surname>Armstrong</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Workshop on Statistical Issues in Public Policy Analysis</title>
+		<meeting>the Workshop on Statistical Issues in Public Policy Analysis<address><addrLine>Carleton University</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="1992">1992</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Armstrong, J. A. (1992), &quot;Error Rate Estimation for Record Linkage: Some Recent Developments,&quot; in Proceedings of the Workshop on Statistical Issues in Public Policy Analysis, Carleton University.</note>
+</biblStruct>
+
+<biblStruct xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Estimation of Record Linkage Models Using Dependent Data</title>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">B</forename><surname>Armstrong</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">E</forename><surname>Mayda</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Survey Methodology</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="page" from="137" to="147" />
+			<date type="published" when="1993">1993</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Armstrong, J. B., and Mayda, J. E. (1993), &quot;Estimation of Record Linkage Models Using Dependent Data,&quot; Survey Methodology, 19, 137-147.</note>
+</biblStruct>
+
+<biblStruct xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Evaluation of Sources of Variation in Record Linkage through a Factorial Experiment</title>
+		<author>
+			<persName><forename type="first">T</forename><forename type="middle">R</forename><surname>Belin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Survey Methodology</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="page" from="13" to="29" />
+			<date type="published" when="1993">1993</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Belin, T. R. (1993), &quot;Evaluation of Sources of Variation in Record Linkage through a Factorial Experiment&quot;, Survey Methodology, 19, 13-29.</note>
+</biblStruct>
+
+<biblStruct xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Calibration of errors in computer matching for census undercount</title>
+		<author>
+			<persName><forename type="first">T</forename><forename type="middle">R</forename><surname>Belin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">B</forename><surname>Rubin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Proceedings of the Section on Government Statistics</title>
+		<imprint>
+			<biblScope unit="page" from="124" to="129" />
+			<date type="published" when="1990">1990</date>
+			<publisher>American Statistical Association</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Belin, T. R., and Rubin, D. B. (1990), &quot;Calibration of errors in computer matching for census undercount,&quot; Proceedings of the Section on Government Statistics, American Statistical Association, 124-129.</note>
+</biblStruct>
+
+<biblStruct xml:id="b4">
+	<analytic>
+		<title level="a" type="main">A Method of Calibrating False-Match Rates in Record Linkage</title>
+		<author>
+			<persName><forename type="first">T</forename><forename type="middle">R</forename><surname>Belin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">B</forename><surname>Rubin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Statistical Association</title>
+		<imprint>
+			<date type="published" when="1995">1995</date>
+		</imprint>
+	</monogr>
+	<note>to appear</note>
+	<note type="raw_reference">Belin, T. R., and Rubin, D. B. (1995), &quot;A Method of Calibrating False-Match Rates in Record Linkage,&quot; Journal of the American Statistical Association, to appear.</note>
+</biblStruct>
+
+<biblStruct xml:id="b5">
+	<monogr>
+		<author>
+			<persName><forename type="first">Y</forename><forename type="middle">M M</forename><surname>Bishop</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">E</forename><surname>Fienberg</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><forename type="middle">W</forename><surname>Holland</surname></persName>
+		</author>
+		<title level="m">Discrete Multivariate Analysis: Theory and Practice</title>
+		<meeting><address><addrLine>Cambridege, MA</addrLine></address></meeting>
+		<imprint>
+			<publisher>MIT Press</publisher>
+			<date type="published" when="1975">1975</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bishop, Y. M. M., Fienberg, S. E., and Holland, P. W., (1975), Discrete Multivariate Analysis: Theory and Practice, Cambridege, MA: MIT Press.</note>
+</biblStruct>
+
+<biblStruct xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Automated Spelling Correction</title>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">D</forename><surname>Budzinsky</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Statistics Canada</title>
+		<imprint>
+			<date type="published" when="1991">1991</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Budzinsky, C. D. (1991), &quot;Automated Spelling Correction,&quot; Statistics Canada.</note>
+</biblStruct>
+
+<biblStruct xml:id="b7">
+	<monogr>
+		<title level="m" type="main">Assignment and Matching Problems: Solution Methods with FORTRAN-Programs</title>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">E</forename><surname>Burkard</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">U</forename><surname>Derigs</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1980">1980</date>
+			<publisher>Springer-Verlag</publisher>
+			<pubPlace>New York, NY</pubPlace>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Burkard, R. E., and Derigs, U. (1980), Assignment and Matching Problems: Solution Methods with FORTRAN-Programs, New York, NY: Springer-Verlag.</note>
+</biblStruct>
+
+<biblStruct xml:id="b8">
+	<monogr>
+		<title/>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">C</forename><surname>Clogg</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1994">1994</date>
+		</imprint>
+	</monogr>
+	<note>Private communication</note>
+	<note type="raw_reference">Clogg, C. C. (1994), Private communication.</note>
+</biblStruct>
+
+<biblStruct xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Maximum Likelihood from Incomplete Data via the EM Algorithm</title>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">P</forename><surname>Dempster</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">N</forename><forename type="middle">M</forename><surname>Laird</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">B</forename><surname>Rubin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the Royal Statistical Society, B</title>
+		<imprint>
+			<biblScope unit="volume">39</biblScope>
+			<biblScope unit="page" from="1" to="38" />
+			<date type="published" when="1977">1977</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Dempster, A. P., Laird, N. M., and Rubin, D. B. (1977), &quot;Maximum Likelihood from Incomplete Data via the EM Algorithm,&quot; Journal of the Royal Statistical Society, B, 39, 1-38.</note>
+</biblStruct>
+
+<biblStruct xml:id="b10">
+	<analytic>
+		<title level="a" type="main">A Theory for Record Linkage</title>
+		<author>
+			<persName><forename type="first">I</forename><forename type="middle">P</forename><surname>Fellegi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">B</forename><surname>Sunter</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Statistical Association</title>
+		<imprint>
+			<biblScope unit="volume">64</biblScope>
+			<biblScope unit="page" from="1183" to="1210" />
+			<date type="published" when="1969">1969</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Fellegi, I. P., and Sunter, A. B. (1969), &quot;A Theory for Record Linkage,&quot; Journal of the American Statistical Association, 64, 1183-1210.</note>
+</biblStruct>
+
+<biblStruct xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Approximate String Comparison</title>
+		<author>
+			<persName><forename type="first">P</forename><forename type="middle">A V</forename><surname>Hall</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><forename type="middle">R</forename><surname>Dowling</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computing Surveys</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="page" from="381" to="402" />
+			<date type="published" when="1980">1980</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hall, P. A. V., and Dowling, G. R. (1980), &quot;Approximate String Comparison,&quot; Computing Surveys, 12, 381-402.</note>
+</biblStruct>
+
+<biblStruct xml:id="b12">
+	<monogr>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">V</forename><surname>Hogg</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">T</forename><surname>Craig</surname></persName>
+		</author>
+		<title level="m">Introduction to Mathematical Statistics</title>
+		<meeting><address><addrLine>New York, NY</addrLine></address></meeting>
+		<imprint>
+			<publisher>J. Wiley</publisher>
+			<date type="published" when="1978">1978</date>
+		</imprint>
+	</monogr>
+	<note>Fourth Edition</note>
+	<note type="raw_reference">Hogg, R. V., and Craig, A. T. (1978), Introduction to Mathematical Statistics, Fourth Edition, New York, NY: J. Wiley.</note>
+</biblStruct>
+
+<biblStruct xml:id="b13">
+	<monogr>
+		<title level="m" type="main">UNIMATCH: A Record Linkage System, User&apos;s Manual</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">A</forename><surname>Jaro</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1976">1976</date>
+			<publisher>U.S. Bureau of the Census</publisher>
+			<pubPlace>Washington, DC</pubPlace>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jaro, M. A. (1976), &quot;UNIMATCH: A Record Linkage System, User&apos;s Manual,&quot; Washington, DC: U.S. Bureau of the Census.</note>
+</biblStruct>
+
+<biblStruct xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Advances in Record-Linkage Methodology as Applied to Matching the 1985 Census of Tampa, Florida</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">A</forename><surname>Jaro</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Statistical Association</title>
+		<imprint>
+			<biblScope unit="volume">89</biblScope>
+			<biblScope unit="page" from="414" to="420" />
+			<date type="published" when="1989">1989</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jaro, M. A. (1989), &quot;Advances in Record-Linkage Methodology as Applied to Matching the 1985 Census of Tampa, Florida,&quot; Journal of the American Statistical Association, 89, 414-420.</note>
+</biblStruct>
+
+<biblStruct xml:id="b15">
+	<monogr>
+		<title level="m" type="main">AUTOMATCH Record Linkage System</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">A</forename><surname>Jaro</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1992">1992</date>
+			<pubPlace>Silver Spring, MD 20905, USA</pubPlace>
+		</imprint>
+	</monogr>
+	<note>unpublished, (Available from Mathew Jaro, 14637 Locustwood Lane</note>
+	<note type="raw_reference">Jaro, M. A. (1992), &quot;AUTOMATCH Record Linkage System,&quot; unpublished, (Available from Mathew Jaro, 14637 Locustwood Lane, Silver Spring, MD 20905, USA).</note>
+</biblStruct>
+
+<biblStruct xml:id="b16">
+	<monogr>
+		<title level="m" type="main">Improved String Comparator</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">P</forename><surname>Lynch</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1994">1994</date>
+			<publisher>U.S. Bureau of the Census</publisher>
+			<pubPlace>Washington, DC</pubPlace>
+		</imprint>
+		<respStmt>
+			<orgName>Statistical Research Division</orgName>
+		</respStmt>
+	</monogr>
+	<note type="report_type">technical report</note>
+	<note type="raw_reference">Lynch, M. P., and Winkler, W. E. (1994), &quot;Improved String Comparator,&quot; technical report, Statistical Research Division, Washington, DC: U.S. Bureau of the Census.</note>
+</biblStruct>
+
+<biblStruct xml:id="b17">
+	<monogr>
+		<title level="m" type="main">Private communication of C-string-comparison routine</title>
+		<author>
+			<persName><forename type="first">G</forename><surname>Mclaughlin</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1993">1993</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">McLaughlin, G. (1993), Private communication of C-string-comparison routine.</note>
+</biblStruct>
+
+<biblStruct xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Maximum Likelihood Via the ECM Algorithm: A General Framework</title>
+		<author>
+			<persName><forename type="first">X</forename><surname>Meng</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">B</forename><surname>Rubin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Biometrika</title>
+		<imprint>
+			<biblScope unit="volume">80</biblScope>
+			<biblScope unit="page" from="267" to="278" />
+			<date type="published" when="1993">1993</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Meng, X., and Rubin, D. B. (1993), &quot;Maximum Likelihood Via the ECM Algorithm: A General Framework,&quot; Biometrika, 80, 267-278.</note>
+</biblStruct>
+
+<biblStruct xml:id="b19">
+	<monogr>
+		<author>
+			<persName><forename type="first">H</forename><forename type="middle">B</forename><surname>Newcombe</surname></persName>
+		</author>
+		<title level="m">Handbook of Record Linkage: Methods for Health and Statistical Studies, Administration, and Business</title>
+		<meeting><address><addrLine>Oxford</addrLine></address></meeting>
+		<imprint>
+			<publisher>Oxford University Press</publisher>
+			<date type="published" when="1988">1988</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Newcombe, H. B. (1988), Handbook of Record Linkage: Methods for Health and Statistical Studies, Administration, and Business, Oxford: Oxford University Press.</note>
+</biblStruct>
+
+<biblStruct xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Automatic Linkage of Vital Records</title>
+		<author>
+			<persName><forename type="first">H</forename><forename type="middle">B</forename><surname>Newcombe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">M</forename><surname>Kennedy</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">J</forename><surname>Axford</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">P</forename><surname>James</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="volume">130</biblScope>
+			<biblScope unit="page" from="954" to="959" />
+			<date type="published" when="1959">1959</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Newcombe, H. B., Kennedy, J. M., Axford, S. J., and James, A. P. (1959), &quot;Automatic Linkage of Vital Records,&quot; Science, 130, 954-959.</note>
+</biblStruct>
+
+<biblStruct xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Generalized Record Linkage at Statistics Canada</title>
+		<author>
+			<persName><forename type="first">C</forename><surname>Nuyens</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the International Conference on Establishment Surveys</title>
+		<meeting>the International Conference on Establishment Surveys<address><addrLine>Alexandria, VA</addrLine></address></meeting>
+		<imprint>
+			<publisher>American Statistical Association</publisher>
+			<date type="published" when="1993">1993</date>
+			<biblScope unit="page" from="926" to="930" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Nuyens, C. (1993), &quot;Generalized Record Linkage at Statistics Canada,&quot; Proceedings of the International Conference on Establishment Surveys, Alexandria, VA: American Statistical Association, 926-930.</note>
+</biblStruct>
+
+<biblStruct xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Automatic Spelling Correction in Scientific and Scholarly Text</title>
+		<author>
+			<persName><forename type="first">J</forename><surname>Pollock</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Zamora</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Communications of the ACM</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="page" from="358" to="368" />
+			<date type="published" when="1984">1984</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Pollock, J. and Zamora, A. (1984), &quot;Automatic Spelling Correction in Scientific and Scholarly Text,&quot; Communications of the ACM, 27, 358-368.</note>
+</biblStruct>
+
+<biblStruct xml:id="b23">
+	<monogr>
+		<author>
+			<persName><forename type="first">E</forename><surname>Porter</surname></persName>
+		</author>
+		<title level="m">Redesigned Record Linkage Software,&quot; tech report, Statistical Research Division</title>
+		<meeting><address><addrLine>Washington, DC</addrLine></address></meeting>
+		<imprint>
+			<publisher>U.S. Bureau of the Census</publisher>
+			<date type="published" when="1994">1994</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Porter, E. (1994), &quot;Redesigned Record Linkage Software,&quot; tech report, Statistical Research Division, Washington, DC: U.S. Bureau of the Census.</note>
+</biblStruct>
+
+<biblStruct xml:id="b24">
+	<monogr>
+		<title level="m" type="main">Private communication of a FORTRAN lsap routine</title>
+		<author>
+			<persName><forename type="first">E</forename><surname>Rowe</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1987">1987</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Rowe, E. (1987), Private communication of a FORTRAN lsap routine.</note>
+</biblStruct>
+
+<biblStruct xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Recent Developments in Calibrating Error Rates for Computer Matching</title>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">B</forename><surname>Rubin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">T</forename><forename type="middle">R</forename><surname>Belin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 1991 Census Annual Research Conference</title>
+		<meeting>the 1991 Census Annual Research Conference</meeting>
+		<imprint>
+			<date type="published" when="1991">1991</date>
+			<biblScope unit="page" from="657" to="668" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Rubin, D. B., and Belin, T. R. (1991), &quot;Recent Developments in Calibrating Error Rates for Computer Matching,&quot; Proceedings of the 1991 Census Annual Research Conference, 657-668.</note>
+</biblStruct>
+
+<biblStruct xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Regression Analysis of Data Files that are Computer Matched</title>
+		<author>
+			<persName><forename type="first">F</forename><surname>Scheuren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Survey Methodology</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="page" from="39" to="58" />
+			<date type="published" when="1993">1993</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Scheuren, F., and Winkler, W. E. (1993), &quot;Regression Analysis of Data Files that are Computer Matched,&quot; Survey Methodology, 19, 39-58.</note>
+</biblStruct>
+
+<biblStruct xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Methods of Computer Linkage of Hospital Admission-Separation Records into Cumulative Health Histories</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">E</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><forename type="middle">B</forename><surname>Newcombe</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Methods of Information in Medicine</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="page" from="118" to="125" />
+			<date type="published" when="1975">1975</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Smith, M. E., and Newcombe, H. B. (1975), &quot;Methods of Computer Linkage of Hospital Admission-Separation Records into Cumulative Health Histories,&quot; Methods of Information in Medicine, 14, 118-125.</note>
+</biblStruct>
+
+<biblStruct xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Generalized Iterative Record Linkage System</title>
+	</analytic>
+	<monogr>
+		<title level="j">Statistics Canada</title>
+		<imprint>
+			<date type="published" when="1983">1983</date>
+			<publisher>Systems Development Division</publisher>
+			<pubPlace>Ottawa, Ontario, Canada</pubPlace>
+		</imprint>
+	</monogr>
+	<note>unpublished report</note>
+	<note type="raw_reference">Statistics Canada (1983), &quot;Generalized Iterative Record Linkage System,&quot; unpublished report, Ottawa, Ontario, Canada: Systems Development Division.</note>
+</biblStruct>
+
+<biblStruct xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Fitting Log-Linear Models When Some Dichotomous Variables are Unobservable</title>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Thibaudeau</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Section on Statistical Computing</title>
+		<meeting>the Section on Statistical Computing</meeting>
+		<imprint>
+			<publisher>American Statistical Association</publisher>
+			<date type="published" when="1989">1989</date>
+			<biblScope unit="page" from="283" to="288" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Thibaudeau, Y. (1989), &quot;Fitting Log-Linear Models When Some Dichotomous Variables are Unobservable,&quot; in Proceedings of the Section on Statistical Computing, American Statistical Association, 283-288.</note>
+</biblStruct>
+
+<biblStruct xml:id="b30">
+	<analytic>
+		<title level="a" type="main">The Discrimination Power of Dependency Structures in Record Linkage</title>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Thibaudeau</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Survey Methodology</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="page" from="31" to="38" />
+			<date type="published" when="1993">1993</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Thibaudeau, Y. (1993), &quot;The Discrimination Power of Dependency Structures in Record Linkage,&quot; Survey Methodology, 19, 31-38.</note>
+</biblStruct>
+
+<biblStruct xml:id="b31">
+	<monogr>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">M</forename><surname>Titterington</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">F M</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">U</forename><forename type="middle">E</forename><surname>Makov</surname></persName>
+		</author>
+		<title level="m">Statistical Analysis of Finite Mixture Distributions</title>
+		<meeting><address><addrLine>New York</addrLine></address></meeting>
+		<imprint>
+			<publisher>J. Wiley</publisher>
+			<date type="published" when="1988">1988</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Titterington, D. M., Smith, A. F. M., Makov, U. E. (1988), Statistical Analysis of Finite Mixture Distributions, New York: J. Wiley.</note>
+</biblStruct>
+
+<biblStruct xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Preprocessing of Lists and String Comparison</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Record Linkage Techniques-1985</title>
+		<editor>
+			<persName><forename type="first">W</forename><surname>Alvey</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">B</forename><surname>Kilss</surname></persName>
+		</editor>
+		<imprint>
+			<publisher>U.S. Internal Revenue Service</publisher>
+			<date type="published" when="1985">1985</date>
+			<biblScope unit="volume">1299</biblScope>
+			<biblScope unit="page" from="181" to="187" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Winkler, W. E. (1985), &quot;Preprocessing of Lists and String Comparison,&quot; in W. Alvey and B. Kilss, (eds.) Record Linkage Techniques-1985, U.S. Internal Revenue Service, Publication 1299 (2-86), 181-187.</note>
+</biblStruct>
+
+<biblStruct xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Using the EM Algorithm for Weight Computation in the Fellegi-Sunter Model of Record Linkage</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Proceedings of the Section on Survey Research Methods</title>
+		<imprint>
+			<biblScope unit="page" from="667" to="671" />
+			<date type="published" when="1988">1988</date>
+			<publisher>American Statistical Association</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Winkler, W. E. (1988), &quot;Using the EM Algorithm for Weight Computation in the Fellegi-Sunter Model of Record Linkage,&quot; Proceedings of the Section on Survey Research Methods, American Statistical Association, 667-671.</note>
+</biblStruct>
+
+<biblStruct xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Near Automatic Weight Computation in the Fellegi-Sunter Model of Record Linkage</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Fifth Census Bureau Annual Research Conference</title>
+		<meeting>the Fifth Census Bureau Annual Research Conference</meeting>
+		<imprint>
+			<date type="published" when="1989">1989</date>
+			<biblScope unit="page" from="145" to="155" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Winkler, W. E. (1989), &quot;Near Automatic Weight Computation in the Fellegi-Sunter Model of Record Linkage,&quot; Proceedings of the Fifth Census Bureau Annual Research Conference, 145-155.</note>
+</biblStruct>
+
+<biblStruct xml:id="b35">
+	<analytic>
+		<title level="a" type="main">String Comparator Metrics and Enhanced Decision Rules in the Fellegi-Sunter Model of Record Linkage</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Proceedings of the Section on Survey Research Methods</title>
+		<imprint>
+			<biblScope unit="page" from="354" to="359" />
+			<date type="published" when="1990">1990</date>
+			<publisher>American Statistical Association</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Winkler, W. E. (1990), &quot;String Comparator Metrics and Enhanced Decision Rules in the Fellegi-Sunter Model of Record Linkage,&quot; Proceedings of the Section on Survey Research Methods, American Statistical Association, 354-359.</note>
+</biblStruct>
+
+<biblStruct xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Error Model for Analysis of Computer Linked Files</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Proceedings of the Section on Survey Research Methods</title>
+		<imprint>
+			<biblScope unit="page" from="472" to="477" />
+			<date type="published" when="1991">1991</date>
+			<publisher>American Statistical Association</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Winkler, W. E. (1991), &quot;Error Model for Analysis of Computer Linked Files,&quot; Proceedings of the Section on Survey Research Methods, American Statistical Association, 472-477.</note>
+</biblStruct>
+
+<biblStruct xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Comparative Analysis of Record Linkage Decision Rules</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Proceedings of the Section on Survey Research Methods</title>
+		<imprint>
+			<biblScope unit="page" from="829" to="834" />
+			<date type="published" when="1992">1992</date>
+			<publisher>American Statistical Association</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Winkler, W. E. (1992), &quot;Comparative Analysis of Record Linkage Decision Rules,&quot; Proceedings of the Section on Survey Research Methods, American Statistical Association, 829-834.</note>
+</biblStruct>
+
+<biblStruct xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Improved Decision Rules in the Fellegi-Sunter Model of Record Linkage</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Proceedings of the Section on Survey Research Methods</title>
+		<imprint>
+			<biblScope unit="page" from="274" to="279" />
+			<date type="published" when="1993">1993</date>
+			<publisher>American Statistical Association</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Winkler, W. E. (1993), &quot;Improved Decision Rules in the Fellegi-Sunter Model of Record Linkage,&quot; Proceedings of the Section on Survey Research Methods, American Statistical Association, 274-279.</note>
+</biblStruct>
+
+<biblStruct xml:id="b39">
+	<monogr>
+		<title level="m" type="main">Improved Matching via a New Assignment Algorithm</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1994">1994a</date>
+			<publisher>U.S. Bureau of the Census</publisher>
+			<pubPlace>Washington, DC</pubPlace>
+		</imprint>
+		<respStmt>
+			<orgName>Statistical Research Division</orgName>
+		</respStmt>
+	</monogr>
+	<note type="report_type">technical report</note>
+	<note type="raw_reference">Winkler, W. E. (1994a), &quot;Improved Matching via a New Assignment Algorithm,&quot; technical report, Statistical Research Division, Washington, DC: U.S. Bureau of the Census.</note>
+</biblStruct>
+
+<biblStruct xml:id="b40">
+	<monogr>
+		<title level="m" type="main">Improved Parameter Estimation in Record Linkage</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1994">1994b</date>
+			<publisher>U.S. Bureau of the Census</publisher>
+			<pubPlace>Washington, DC</pubPlace>
+		</imprint>
+		<respStmt>
+			<orgName>Statistical Research Division</orgName>
+		</respStmt>
+	</monogr>
+	<note type="report_type">technical report</note>
+	<note type="raw_reference">Winkler, W. E. (1994b), &quot;Improved Parameter Estimation in Record Linkage,&quot; technical report, Statistical Research Division, Washington, DC: U.S. Bureau of the Census.</note>
+</biblStruct>
+
+<biblStruct xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Matching and Record Linkage</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Survey Methods for Businesses, Farms, and Institutions</title>
+		<editor>
+			<persName><forename type="first">B</forename><forename type="middle">G</forename><surname>Cox</surname></persName>
+		</editor>
+		<meeting><address><addrLine>New York</addrLine></address></meeting>
+		<imprint>
+			<publisher>J. Wiley</publisher>
+			<date type="published" when="1994">1994</date>
+		</imprint>
+	</monogr>
+	<note>to appear</note>
+	<note type="raw_reference">Winkler, W. E. (1994c), &quot;Matching and Record Linkage,&quot; in B. G. Cox (ed.) Survey Methods for Businesses, Farms, and Institutions, New York: J. Wiley, to appear.</note>
+</biblStruct>
+
+<biblStruct xml:id="b42">
+	<monogr>
+		<title level="m" type="main">Documentation of General EM Software for Latent Class Models</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1994">1994d</date>
+			<publisher>U.S. Bureau of the Census</publisher>
+			<pubPlace>Washington, DC</pubPlace>
+		</imprint>
+		<respStmt>
+			<orgName>Statistical Research Division</orgName>
+		</respStmt>
+	</monogr>
+	<note type="report_type">technical report</note>
+	<note type="raw_reference">Winkler, W. E. (1994d), &quot;Documentation of General EM Software for Latent Class Models,&quot; technical report, Statistical Research Division, Washington, DC: U.S. Bureau of the Census.</note>
+</biblStruct>
+
+<biblStruct xml:id="b43">
+	<monogr>
+		<title level="m" type="main">An Application of the Fellegi-Sunter Model of Record Linkage to the 1990 U.S. Decennial Census</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Winkler</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Thibaudeau</surname></persName>
+		</author>
+		<idno>91/09</idno>
+		<imprint>
+			<date type="published" when="1991">1991</date>
+			<publisher>U.S. Bureau of the Census</publisher>
+			<pubPlace>Washington, DC</pubPlace>
+		</imprint>
+	</monogr>
+	<note type="report_type">Statistical Research Division Report</note>
+	<note type="raw_reference">Winkler, W. E., and Thibaudeau, Y. (1991), &quot;An Application of the Fellegi-Sunter Model of Record Linkage to the 1990 U.S. Decennial Census,&quot; Statistical Research Division Report 91/09, Washington, DC: U.S. Bureau of the Census.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

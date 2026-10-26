@@ -1,0 +1,38 @@
+# Nuxt
+.nuxt
+.output
+.data
+dist
+
+# Node
+node_modules
+
+# Env
+.env
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Supabase
+supabase/.temp
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# Supabase local state
+supabase/.branches
+
+# Local tooling
+.claude/
+graphify-out/
+*.log

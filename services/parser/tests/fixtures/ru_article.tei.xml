@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="ru">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">ОПТИМИЗАЦИЯ ПАРАЛЛЕЛЬНЫХ ВЫЧИСЛЕНИЙ В ГЕТЕРОГЕННЫХ СИСТЕМАХ С ИСПОЛЬЗОВАНИЕМ ГРАФОВЫХ МОДЕЛЕЙ ЗАВИСИМОСТЕЙ ДАННЫХ</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName><forename type="first">Антонов</forename><forename type="middle">Игорь</forename><surname>Михайлович</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Igor</forename><surname>Antonov</surname></persName>
+						</author>
+						<author>
+							<persName><surname>Mikhailovich</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Artem</forename><surname>Pavlov</surname></persName>
+						</author>
+						<author>
+							<persName><surname>Sergeyevich</surname></persName>
+						</author>
+						<author>
+							<affiliation key="aff0">
+								<orgName type="department">Department of High-Performance Computing</orgName>
+								<orgName type="institution">ITMO University St. Petersburg</orgName>
+								<address>
+									<country key="RU">Russia</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<affiliation key="aff1">
+								<orgName type="institution">ITMO University St. Petersburg</orgName>
+								<address>
+									<country key="RU">Russia</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">ОПТИМИЗАЦИЯ ПАРАЛЛЕЛЬНЫХ ВЫЧИСЛЕНИЙ В ГЕТЕРОГЕННЫХ СИСТЕМАХ С ИСПОЛЬЗОВАНИЕМ ГРАФОВЫХ МОДЕЛЕЙ ЗАВИСИМОСТЕЙ ДАННЫХ</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">B2A9388E6F5905C845E0BBE282C0B89B</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.8.1" ident="GROBID" when="2026-10-24T21:30+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>parallel programming</term>
+					<term>heterogeneous computing</term>
+					<term>dependency graphs</term>
+					<term>workload optimization</term>
+					<term>GPU computing</term>
+					<term>task balancing</term>
+					<term>high-performance systems</term>
+					<term>memory architecture</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Преподаватель кафедры высокопроизводительных вычислений, Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики (ИТМО) г. Санкт-Петербург, Россия Павлов Артем Сергеевич Студент факультета информационных технологий и программирования, Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики (ИТМО) г. Санкт-Петербург, Россия Аннотация В данной научной статье проводится глубокое и всестороннее исследование методов повышения эффективности параллельной обработки данных в современных гетерогенных вычислительных средах, объединяющих ресурсы центральных и графических процессоров. Актуальность работы обусловлена стремительным усложнением архитектур суперкомпьютерных систем и необходимостью минимизации простоев вычислительных узлов при выполнении ресурсоемких задач. В рамках статьи осуществляется детальная декомпозиция алгоритмов управления потоками данных, анализируются механизмы динамической балансировки нагрузки и стратегии минимизации задержек при передаче информации между устройствами с различной иерархией памяти. Авторы подробно рассматривают математические модели на базе направленных ациклических графов (DAG) для формализации зависимостей между вычислительными задачами и доказывают, что предиктивное планирование выполнения узлов графа позволяет достичь существенного сокращения общего времени исполнения программ. В работе уделяется внимание программным инструментам и библиотекам, реализующим концепцию Task-based параллелизма, а также методам автоматической векторизации кода под специфические наборы инструкций современных ускорителей. Ключевые слова: параллельное программирование, гетерогенные вычисления, графы зависимостей, оптимизация нагрузки, GPU-вычисления, балансировка задач, высокопроизводительные системы, архитектура памяти.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="ru">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Введение</head><p>Проблема эффективной утилизации вычислительных мощностей в современных многоядерных и многопроцессорных системах остается одной из центральных задач теоретического и прикладного программирования. С наступлением эпохи «пост-Мура», когда рост тактовых частот процессоров практически прекратился, дальнейшее повышение производительности стало возможным исключительно за счет экстенсивного наращивания параллелизма и использования специализированных ускорителей (GPU, FPGA, TPU).</p><p>Однако переход к гетерогенным вычислениям порождает ряд фундаментальных сложностей, связанных с неоднородностью архитектур и огромными накладными расходами на синхронизацию и пересылку данных между хост-процессором и устройством.</p><p>Современное высокопроизводительное программирование требует комплексного подхода, при котором разработчик должен учитывать не только алгоритмическую сложность задачи, но и топологию вычислительной системы. Традиционные модели параллелизма, такие как OpenMP или MPI, в их классическом виде часто не позволяют эффективно задействовать ресурсы графических ускорителей в рамках единого вычислительного цикла. Актуальность данного исследования продиктовано необходимостью создания адаптивных планировщиков задач, способных в реальном времени распределять нагрузку между ядрами CPU и потоковыми мультипроцессорами GPU, исходя из текущей загруженности шины данных и специфики выполняемых операций.</p><p>Целью настоящего исследования является разработка методологии оптимизации параллельных программ на основе графового представления вычислительных процессов. Для достижения этой цели решаются задачи по формализации правил построения графов зависимостей, изучению алгоритмов топологической сортировки в контексте приоритетности выполнения и анализу влияния локальности данных на общую пропускную способность системы. Научный поиск сосредоточен на создании стратегий «мягкого» планирования, которые позволяют минимизировать блокировки потоков и обеспечить непрерывную загрузку всех доступных вычислительных устройств.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Материалы и методы исследования</head><p>Методологический аппарат настоящего исследования выстроен на базе теории графов и методов математического программирования. Основным концептуальным инструментом выступает модель направленного ациклического графа (DAG), где узлы представляют собой атомарные вычислительные задачи (кернелы), а ребра отражают зависимости по данным. Данный подход позволяет абстрагироваться от конкретной реализации функций и сосредоточиться на структуре информационных потоков внутри сложной программы.</p><p>В ходе основной фазы исследования активно применялся метод имитационного моделирования процессов планирования в среде гетерогенных узлов. Разработанная модель учитывала нелинейные задержки, возникающие при копировании данных через шину PCI-Express, а также различия в производительности векторных и скалярных блоков обработки. Для сбора первичных данных использовались инструменты низкоуровневого профилирования (NVIDIA Nsight, Intel Advisor), позволяющие фиксировать время исполнения отдельных задач с точностью до микросекунд. Это обеспечило высокую достоверность входных параметров для математической модели планировщика.</p><p>Особое внимание в методологии уделялось изучению стратегий динамического перераспределения задач (Work Stealing). В отличие от статического распределения, данный метод позволяет свободным ядрам «заимствовать» задачи из очередей перегруженных процессоров, что критически важно в условиях стохастического изменения времени выполнения задач. Авторская методика включала разработку алгоритма эвристического поиска оптимального пути в графе задач, учитывающего стоимость пересылки данных (Data locality-aware scheduling). Мы исходили из предположения, что перенос вычислений к данным часто является более эффективным решением, чем пересылка больших объемов памяти к свободному вычислителю.</p><p>Для верификации теоретических положений были проведены серии экспериментов на задачах линейной алгебры и быстрого преобразования Фурье большой размерности. Использовались современные компиляторы с поддержкой стандартов C++20 и специализированные расширения для гетерогенных вычислений (CUDA, SYCL). Весь комплекс примененных методов был направлен на создание целостной концепции разработки программного обеспечения, где иерархия задач автоматически адаптируется под доступные аппаратные ресурсы, обеспечивая максимальную энергетическую и вычислительную эффективность.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Результаты исследования</head><p>Проведенное исследование позволило зафиксировать значительный прирост производительности при использовании предложенных графовых моделей планирования. Одним из ключевых результатов стало доказательство того, что предварительный анализ графа зависимостей позволяет выявить скрытый параллелизм, который игнорируется при последовательном или простейшем многопоточном выполнении. Установлено, что оптимизация порядка выполнения задач с учетом минимизации копирований между RAM и VRAM позволяет сократить общее время исполнения программы на 25-35 %.</p><p>Существенным результатом стал детальный анализ влияния размера графа задач на накладные расходы планировщика. Было выявлено, что чрезмерная декомпозиция (избыточное количество мелких задач) приводит к деградации производительности из-за высокой стоимости управления очередями. В ходе экспериментов определен оптимальный диапазон гранулярности задач, при котором обеспечивается баланс между загрузкой ядер и эффективностью планирования. Доказано, что использование асинхронных потоков управления (Streams) в сочетании с двойной буферизацией позволяет практически полностью скрыть задержки на передачу данных по шине за счет перекрытия вычислений и копирования.</p><p>В области работы с большими графами данных зафиксировано превосходство алгоритмов, учитывающих топологию кеш-памяти. Результаты моделирования показали, что группировка задач, использующих общие наборы данных (Task grouping), увеличивает процент попаданий в кеш-память третьего уровня (L3 Cache) на 15-20 %. Дополнительно было установлено, что применение гибридных схем, где критические по времени задачи выполняются на CPU с низкой задержкой, а массовые вычисления переносятся на GPU, является наиболее устойчивой стратегией для широкого класса научных приложений.</p><p>В заключение блока результатов следует отметить разработанный прототип библиотеки планировщика, который в автоматическом режиме строит граф зависимостей во время выполнения программы. Испытания показали, что данный инструмент позволяет разработчикам писать код в привычном императивном стиле, в то время как система под капотом осуществляет его параллельное исполнение. Таким образом, комплексный подход к оптимизации на уровне графов задач позволяет достичь масштабируемости, которая ранее была доступна только при ручной низкоуровневой настройке каждого вычислительного узла. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Заключение</head></div><figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head></head><label></label><figDesc>менять стратегию балансировки в зависимости от контекста. Подобная конвергенция классической теории алгоритмов и современных методов машинного обучения обеспечит переход к по-настоящему автономным и энергоэффективным вычислительным системам будущего.</figDesc><table><row><cell cols="7">В ходе проведенного исследования были систематизированы научно-</cell></row><row><cell cols="7">методические подходы к оптимизации параллельных вычислений в современных</cell></row><row><cell cols="7">гетерогенных средах. В результате теоретического обоснования и</cell></row><row><cell cols="7">экспериментальной верификации было доказано, что использование графовых</cell></row><row><cell cols="7">моделей зависимостей является необходимым условием для достижения</cell></row><row><cell>предельной</cell><cell cols="2">производительности</cell><cell cols="2">сложных</cell><cell cols="2">программных</cell><cell>комплексов.</cell></row><row><cell cols="7">Фундаментальный вывод работы заключается в том, что в условиях</cell></row><row><cell cols="7">неоднородности аппаратных ресурсов управление потоками данных становится</cell></row><row><cell cols="7">более важным фактором эффективности, чем чистая скорость выполнения</cell></row><row><cell cols="2">отдельных инструкций.</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell cols="7">Практическая реализация предложенных методов планирования позволяет</cell></row><row><cell cols="7">значительно сократить время решения сложных вычислительных задач в таких</cell></row><row><cell cols="7">областях, как криптография, биоинформатика и метеорология. Это создает</cell></row><row><cell cols="7">надежную базу для разработки нового поколения системного программного</cell></row><row><cell cols="7">обеспечения, способного автоматически извлекать максимальную выгоду из</cell></row><row><cell cols="7">параллелизма современных процессоров. Полученные результаты могут быть</cell></row><row><cell cols="7">использованы при проектировании библиотек стандартных алгоритмов и сред</cell></row><row><cell cols="6">выполнения для высокопроизводительных кластеров.</cell></row><row><cell cols="7">Дальнейшее развитие тематики видится в интеграции методов искусственного</cell></row><row><cell cols="7">интеллекта в процесс планирования задач. Обучение нейронных сетей на</cell></row><row><cell>профилях</cell><cell>выполнения</cell><cell cols="2">различных</cell><cell cols="2">программ</cell><cell>позволит</cell><cell>создавать</cell></row><row><cell cols="7">самообучающиеся планировщики, способные предугадывать время исполнения</cell></row><row><cell cols="2">задач и динамически</cell><cell></cell><cell></cell><cell></cell><cell></cell></row></table></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct xml:id="b0">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">Б</forename><forename type="middle">В</forename><surname>Керниган</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Д</forename><forename type="middle">М</forename><surname>Ритчи</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Язык программирования Си. М.: Вильямс</title>
+		<imprint>
+			<biblScope unit="volume">304</biblScope>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Керниган Б.В., Ритчи Д.М. Язык программирования Си. М.: Вильямс, 2015. 304 с.</note>
+</biblStruct>
+
+<biblStruct xml:id="b1">
+	<monogr>
+		<title level="m" type="main">Язык программирования C++. М.: Бином, 2011</title>
+		<author>
+			<persName><forename type="first">Б</forename><surname>Страуструп</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1136">1136</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Страуструп Б. Язык программирования C++. М.: Бином, 2011. 1136 с.</note>
+</biblStruct>
+
+<biblStruct xml:id="b2">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">Э</forename><surname>Таненбаум</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Х</forename><surname>Бос</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Современные операционные системы. СПб.: Питер</title>
+		<imprint>
+			<date type="published" when="1120">2015. 1120</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Таненбаум Э., Бос Х. Современные операционные системы. СПб.: Питер, 2015. 1120 с.</note>
+</biblStruct>
+
+<biblStruct xml:id="b3">
+	<monogr>
+		<title/>
+		<author>
+			<persName><forename type="first">Д</forename><forename type="middle">Э</forename><surname>Knut</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="middle">М</forename><surname>Искусство Программирования</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2006">2006</date>
+			<publisher>Вильямс</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">К Knut Д.Э. Искусство программирования. М.: Вильямс, 2006. Т. 1. 720 с.</note>
+</biblStruct>
+
+<biblStruct xml:id="b4">
+	<monogr>
+		<title/>
+		<author>
+			<persName><forename type="first">С</forename><surname>Мейерс</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C++</forename><forename type="middle">М</forename><surname>Эффективное</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2014">2014</date>
+			<publisher>ДМК Пресс</publisher>
+			<biblScope unit="volume">300</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Мейерс С. Эффективное использование C++. М.: ДМК Пресс, 2014. 300 с.</note>
+</biblStruct>
+
+<biblStruct xml:id="b5">
+	<monogr>
+		<title level="m" type="main">Современное проектирование на C++. М.: Вильямс</title>
+		<author>
+			<persName><forename type="first">А</forename><surname>Александреску</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+			<biblScope unit="volume">336</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Александреску А. Современное проектирование на C++. М.: Вильямс, 2015. 336 с.</note>
+</biblStruct>
+
+<biblStruct xml:id="b6">
+	<monogr>
+		<title level="m" type="main">Параллельное программирование на C++ в действии. М.: ДМК Пресс</title>
+		<author>
+			<persName><forename type="first">Э</forename><surname>Уильямс</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2012">2012</date>
+			<biblScope unit="volume">672</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Уильямс Э. Параллельное программирование на C++ в действии. М.: ДМК Пресс, 2012. 672 с.</note>
+</biblStruct>
+
+<biblStruct xml:id="b7">
+	<monogr>
+		<title level="m" type="main">Advanced Programming in the UNIX Environment</title>
+		<author>
+			<persName><forename type="first">У</forename><forename type="middle">Р</forename><surname>Стивенс</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">С</forename><forename type="middle">А</forename><surname>Раго</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013">2013</date>
+			<publisher>Addison-Wesley</publisher>
+			<biblScope unit="page">1016</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Стивенс У.Р., Раго С.А. Advanced Programming in the UNIX Environment. Addison-Wesley, 2013. 1016 p.</note>
+</biblStruct>
+
+<biblStruct xml:id="b8">
+	<monogr>
+		<title level="m" type="main">Игровой движок. Архитектура и программирование. М.: ДМК Пресс, 2021</title>
+		<author>
+			<persName><forename type="first">Д</forename><surname>Грегори</surname></persName>
+		</author>
+		<imprint>
+			<biblScope unit="page">1240</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Грегори Д. Игровой движок. Архитектура и программирование. М.: ДМК Пресс, 2021. 1240 с.</note>
+</biblStruct>
+
+<biblStruct xml:id="b9">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">Р</forename><surname>Лав</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Ядро Linux: описание процесса разработки. М.: Вильямс</title>
+		<imprint>
+			<biblScope unit="page">496</biblScope>
+			<date type="published" when="2013">2013</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Лав Р. Ядро Linux: описание процесса разработки. М.: Вильямс, 2013. 496 с. References</note>
+</biblStruct>
+
+<biblStruct xml:id="b10">
+	<monogr>
+		<title level="m" type="main">The C Programming Language</title>
+		<author>
+			<persName><forename type="first">B</forename><forename type="middle">W</forename><surname>Kernighan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">M</forename><surname>Ritchie</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1988">1988</date>
+			<publisher>Prentice Hall</publisher>
+			<biblScope unit="page">272</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Kernighan B.W., Ritchie D.M. The C Programming Language. Prentice Hall, 1988. 272 p.</note>
+</biblStruct>
+
+<biblStruct xml:id="b11">
+	<monogr>
+		<title level="m" type="main">The C++ Programming Language</title>
+		<author>
+			<persName><forename type="first">B</forename><surname>Stroustrup</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013">2013</date>
+			<publisher>Addison-Wesley</publisher>
+			<biblScope unit="page">1366</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Stroustrup B. The C++ Programming Language. Addison-Wesley, 2013. 1366 p.</note>
+</biblStruct>
+
+<biblStruct xml:id="b12">
+	<monogr>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">S</forename><surname>Tanenbaum</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><surname>Bos</surname></persName>
+		</author>
+		<title level="m">Modern Operating Systems</title>
+		<imprint>
+			<publisher>Pearson</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page">1136</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Tanenbaum A.S., Bos H. Modern Operating Systems. Pearson, 2014. 1136 p.</note>
+</biblStruct>
+
+<biblStruct xml:id="b13">
+	<monogr>
+		<title level="m" type="main">The Art of Computer Programming</title>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">E</forename><surname>Knuth</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1997">1997</date>
+			<publisher>Addison-Wesley</publisher>
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="page">672</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Knuth D.E. The Art of Computer Programming. Addison-Wesley, 1997. Vol. 1. 672 p.</note>
+</biblStruct>
+
+<biblStruct xml:id="b14">
+	<monogr>
+		<title/>
+		<author>
+			<persName><forename type="first">S</forename><surname>Meyers</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C++</forename><surname>Effective</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Addison-Wesley</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005">2005</date>
+			<biblScope unit="page">320</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Meyers S. Effective C++. Addison-Wesley, 2005. 320 p.</note>
+</biblStruct>
+
+<biblStruct xml:id="b15">
+	<monogr>
+		<title level="m" type="main">Modern C++ Design: Generic Programming and Design Patterns Applied</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Alexandrescu</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001">2001</date>
+			<publisher>Addison-Wesley</publisher>
+			<biblScope unit="page">352</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Alexandrescu A. Modern C++ Design: Generic Programming and Design Patterns Applied. Addison-Wesley, 2001. 352 p.</note>
+</biblStruct>
+
+<biblStruct xml:id="b16">
+	<monogr>
+		<title level="m" type="main">C++ Concurrency in Action</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Williams</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2012">2012</date>
+			<publisher>Manning Publications</publisher>
+			<biblScope unit="page">528</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Williams A. C++ Concurrency in Action. Manning Publications, 2012. 528 p.</note>
+</biblStruct>
+
+<biblStruct xml:id="b17">
+	<monogr>
+		<title level="m" type="main">Advanced Programming in the UNIX Environment</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">R</forename><surname>Stevens</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">A</forename><surname>Rago</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013">2013</date>
+			<publisher>Addison-Wesley</publisher>
+			<biblScope unit="page">1016</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Stevens W.R., Rago S.A. Advanced Programming in the UNIX Environment. Addison-Wesley, 2013. 1016 p.</note>
+</biblStruct>
+
+<biblStruct xml:id="b18">
+	<monogr>
+		<title level="m" type="main">Game Engine Architecture</title>
+		<author>
+			<persName><forename type="first">J</forename><surname>Gregory</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+			<publisher>CRC Press</publisher>
+			<biblScope unit="page">1152</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gregory J. Game Engine Architecture. CRC Press, 2018. 1152 p.</note>
+</biblStruct>
+
+<biblStruct xml:id="b19">
+	<monogr>
+		<author>
+			<persName><forename type="first">R</forename><surname>Love</surname></persName>
+		</author>
+		<title level="m">Linux Kernel Development</title>
+		<imprint>
+			<publisher>Addison-Wesley</publisher>
+			<date type="published" when="2010">2010</date>
+			<biblScope unit="page">480</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Love R. Linux Kernel Development. Addison-Wesley, 2010. 480 p.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>
